@@ -1,0 +1,204 @@
+# FT Article Language Complexity Widget Plan
+
+## Goal
+
+Build a desktop-only FT article-page widget that lets readers switch between three language complexity levels:
+
+- `Original`: the published article, default state.
+- `Clearer`: slightly simpler language while preserving the author's meaning, tone, argument, structure, and style.
+- `Simple`: substantially simpler language for a high-school-level reader, still preserving meaning, tone, and key FT style.
+
+The reader interaction should feel instant. Alternate versions should be precomputed before the reader clicks, and switching levels should trigger an editorial-feeling text transformation animation rather than a plain text swap.
+
+## Current Repo Context
+
+- `example_page.html` is a static captured FT article page.
+- `widgets.png` shows the target location on the left rail, under the existing vertical share/save widgets.
+- `main.py` is currently only a placeholder.
+- `pyproject.toml` defines a minimal Python project with no dependencies yet.
+- The captured FT article body lives in `#article-body` with classes including `.n-content-body` and `.js-article__content-body`.
+- The existing left rail is `.share-nav__vertical` inside `.share-nav`.
+
+## Product Framing
+
+Avoid labels like "Hard", "Medium", and "Easy" in the UI. They are clear internally, but user-facing copy can feel patronising. A better first pass:
+
+- `Original`
+- `Clearer`
+- `Simple`
+
+Widget name options:
+
+- `Reading level`
+- `Clarity`
+- `Article language`
+
+Recommended hackathon UI:
+
+- A narrow vertical segmented control under the share/save rail.
+- Use FT-like paper tones, black borders, and one accent colour for the active level.
+- Include a compact `Aa` or pencil/markup icon so it reads as an article-text control, not another share button.
+- Keep button copy visible. Icons alone would make the feature harder to understand in a demo.
+- Use `aria-pressed`, keyboard focus styles, and a visually hidden status message such as `Article language changed to Simple`.
+
+## Architecture
+
+Use a two-layer approach:
+
+- Front-end layer: reads precomputed language variants, renders the widget, swaps article segments, and plays animation.
+- Precompute layer: extracts article text, calls an LLM, validates output, and writes a JSON asset that the front-end can load.
+
+Do not put an OpenAI API key in browser code. The API belongs in a local/server-side precompute script or backend job.
+
+Suggested precomputed asset shape:
+
+```json
+{
+  "articleId": "ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6",
+  "generatedAt": "2026-05-10T00:00:00Z",
+  "levels": ["original", "clearer", "simple"],
+  "segments": [
+    {
+      "id": "p-001",
+      "selector": "#article-body > p:nth-of-type(1)",
+      "originalHtml": "Does another city on Earth...",
+      "clearerHtml": "Does any other city on Earth...",
+      "simpleHtml": "Is there another city that annoys people this much?",
+      "lockedTerms": ["London", "American", "Russian"],
+      "warnings": []
+    }
+  ]
+}
+```
+
+Segment-level storage is better than storing one whole rewritten article because it lets the front end preserve figures, captions, pull quotes, links, emphasis tags, and article layout.
+
+## OpenAI API Plan
+
+Use the OpenAI API only during precomputation.
+
+- Use the Responses API for new text-generation work.
+- Use Structured Outputs so each LLM response conforms to a JSON schema instead of asking for loose prose.
+- Keep the model configurable through an environment variable rather than hardcoding it.
+- Start with a cost-conscious model for hackathon iteration, then compare against a stronger model on a small evaluation set.
+- Use the Batch API if generating variants for many articles, because generation can happen asynchronously before publication or page render.
+- Use prompt caching where repeated prompts are large and share the same static instructions.
+
+Useful official docs:
+
+- OpenAI Responses API and text generation: https://platform.openai.com/docs/guides/text
+- Structured Outputs: https://platform.openai.com/docs/guides/structured-outputs
+- Batch API: https://platform.openai.com/docs/guides/batch/
+- Prompt Caching: https://platform.openai.com/docs/guides/prompt-caching
+- Current model catalogue: https://developers.openai.com/api/docs/models
+
+Prompt requirements:
+
+- Preserve the author's argument, tone, stance, structure, humour, and implied meaning.
+- Preserve names, dates, numbers, places, institutions, quoted phrases, and article-specific terminology.
+- Do not add new facts, remove caveats, or make the article more neutral than the original.
+- Do not rewrite direct quotes unless the output explicitly marks them as paraphrases. For an FT feature, the safer default is to leave direct quotations unchanged.
+- Return per-segment rewrites plus warnings for any segment that could not be simplified without risking meaning.
+
+Validation requirements:
+
+- Compare named entities, numbers, dates, and quoted strings between original and rewritten text.
+- Flag major length changes, missing paragraphs, changed links, or missing inline tags.
+- Run a second LLM or deterministic checklist as an editorial QA pass.
+- Keep an audit trail of prompt version, model, generation time, and warnings.
+
+## Animation Plan
+
+The animation should look like editorial revision, not sci-fi transformation.
+
+Recommended MVP animation:
+
+- On click, split each changing paragraph into words.
+- Compute a word-level diff between current and target text.
+- Strike deleted words with a quick pencil-like line.
+- Fade or slide replacement words into place as if an editor marked them in.
+- Remove the temporary markup after the transition and leave clean final text.
+
+Implementation approach:
+
+- For the first demo, use CSS transitions plus the Web Animations API. This avoids a dependency and keeps the effect easier to control.
+- If word-level diffing becomes complex, add a small diff library after comparing bundle size and API simplicity.
+- Avoid GSAP for the first prototype unless the animation requires timeline orchestration that native browser APIs cannot handle quickly.
+- Respect `prefers-reduced-motion` by swapping text without animated strike-through.
+- Prevent layout jank by preserving paragraph min-heights during animation.
+- Keep screen-reader output simple: update the DOM once per chosen level, not word by word.
+
+## Implementation Phases
+
+### Phase 1: Static DOM Prototype
+
+- Preserve `example_page.html` as source input if possible, and create a prototype copy or injected assets for experimentation.
+- Add a small JS module that finds `.share-nav__vertical` and appends a `Reading level` widget below it.
+- Add static mock variants for the first 3 to 5 paragraphs.
+- Implement level switching with instant text replacement first.
+- Add basic tracking logs via `console.info` so demo interactions are observable.
+
+### Phase 2: Full Article Segment Handling
+
+- Extract all eligible article text nodes from `#article-body`.
+- Handle `p`, `blockquote`, and optionally captions.
+- Preserve non-text article elements such as images, Flourish embeds, email links, and onward-journey components.
+- Store original segment HTML on page load so `Original` can always restore the published version.
+- Ensure toggling repeatedly between levels does not accumulate nested spans or markup.
+
+### Phase 3: Precompute Script
+
+- Turn `main.py` into a CLI with commands such as `extract`, `generate`, and `validate`.
+- Parse `example_page.html` with an HTML parser.
+- Produce `language_variants/<article-id>.json`.
+- Call OpenAI only from the CLI or backend environment.
+- Load `OPENAI_API_KEY` from the environment.
+- Cache generated JSON locally so hackathon demos do not depend on live API calls.
+
+### Phase 4: Animation Engine
+
+- Add paragraph-level transition first.
+- Add word-level diff animation second.
+- Use an editorial visual style: strike-through, pencil underline, ink replacement, or newsroom mark-up.
+- Test switching while scrolled mid-article and while clicking rapidly between levels.
+
+### Phase 5: Quality And Demo Polish
+
+- Create 5 to 10 before/after examples and manually score preservation of meaning, tone, and readability.
+- Add a lightweight "generated by AI, reviewed by FT" style disclosure if needed for demo trust.
+- Add analytics event names, for example `article_language_level_selected` with `level`, `articleId`, and `previousLevel`.
+- Prepare a fallback state if variants are unavailable: widget is hidden or disabled with `Original only`.
+
+## Technical Risks
+
+- Editorial trust is the main risk. A simplification that changes nuance is worse than no feature.
+- Direct quotes and opinion columns need special handling because small wording changes can alter tone or attribution.
+- Whole-article replacement can break embedded components. Segment-level replacement reduces that risk.
+- Animation can hurt readability if it is too long, too clever, or runs on every paragraph simultaneously.
+- Article height changes can move the reader's scroll position. Preserve the active paragraph position during swaps.
+- Browser-only generation is not acceptable because it exposes API keys and creates latency.
+
+## Open Questions
+
+- Is the hackathon demo expected to modify the static `example_page.html`, or should we create a separate prototype page that imports it?
+- Should captions and pull quotes be simplified, or only article body paragraphs?
+- Should `Simple` preserve FT house style closely, or is clarity more important than style at that level?
+- Is the target future integration the FT article app, a browser extension, or a standalone demo?
+- Do we want one generated rewrite per paragraph, or should the model rewrite with full article context and output segment-aligned results?
+
+## Recommended Next Step
+
+Build Phase 1 directly against the captured FT page:
+
+- Add a left-rail widget below `.share-nav__vertical`.
+- Use handcrafted variants for the first few paragraphs.
+- Implement basic switching and one clean editorial animation.
+
+This gets a visual demo quickly. After that, add the OpenAI-backed precompute pipeline.
+
+## Codex Workflow Notes
+
+- This task is currently best handled by one agent because the repo is tiny and the first work is tightly coupled.
+- Subagents become useful later when tasks split cleanly, for example one agent on the OpenAI generation pipeline and another on front-end animation polish.
+- A project-specific `SKILL.md` could be useful after the first prototype stabilises, especially to capture FT DOM selectors, naming conventions, and demo commands for future Codex sessions.
+- Keeping `MEMORY.md` in the repo is reasonable for this hackathon because it is visible, versionable, and easy for future sessions to read.
