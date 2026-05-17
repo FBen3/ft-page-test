@@ -61,3 +61,4 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - Point out when a task would benefit from a `SKILL.md`, subagents, a clearer goal statement, or a different Codex workflow.
 - This task is not yet a good subagent task because the repo is small and the first prototype is tightly coupled.
 - A future `SKILL.md` may be worthwhile once selectors, commands, and project conventions stabilise.
+- This `MEMORY.md` file should be treated as a "living" document and Codex should update it accordingly as the project progresses and as conversations shed light on new insights or plans of direction. Avoid updating all time; only update when necessary.

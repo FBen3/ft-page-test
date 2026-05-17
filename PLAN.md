@@ -8,7 +8,8 @@ Build a desktop-only FT article-page widget that lets readers switch between thr
 - `Clearer`: slightly simpler language while preserving the author's meaning, tone, argument, structure, and style.
 - `Simple`: substantially simpler language for a high-school-level reader, still preserving meaning, tone, and key FT style.
 
-The reader interaction should feel instant. Alternate versions should be precomputed before the reader clicks, and switching levels should trigger an editorial-feeling text transformation animation rather than a plain text swap.
+The reader interaction should feel instant. Alternate versions should be precomputed before the reader clicks, and switching levels 
+should trigger an editorial-feeling text transformation animation rather than a plain text swap.
 
 ## Current Repo Context
 
@@ -21,7 +22,8 @@ The reader interaction should feel instant. Alternate versions should be precomp
 
 ## Product Framing
 
-Avoid labels like "Hard", "Medium", and "Easy" in the UI. They are clear internally, but user-facing copy can feel patronising. A better first pass:
+Avoid labels like "Hard", "Medium", and "Easy" in the UI. They are clear internally, but user-facing copy can feel patronising. 
+A better first pass:
 
 - `Original`
 - `Clearer`
@@ -71,7 +73,8 @@ Suggested precomputed asset shape:
 }
 ```
 
-Segment-level storage is better than storing one whole rewritten article because it lets the front end preserve figures, captions, pull quotes, links, emphasis tags, and article layout.
+Segment-level storage is better than storing one whole rewritten article because it lets the front end preserve figures, captions, i
+pull quotes, links, emphasis tags, and article layout.
 
 ## OpenAI API Plan
 
