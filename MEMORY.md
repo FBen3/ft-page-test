@@ -55,6 +55,13 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - Implement instant switching first, then add an editorial strike-through/replacement animation.
 - After the UI works, turn `main.py` into a precompute CLI that extracts article segments and generates `language_variants/<article-id>.json`.
 
+## Phase 1 Progress
+
+- `phase1-prototype.html` now exists as a readable prototype copy of the FT capture.
+- `phase1-widget.css` styles a left-rail `Reading level` widget intended to sit under the share rail.
+- `phase1-widget.js` mounts the widget into `.share-nav__vertical`, stores original paragraph HTML, and swaps the first four article paragraphs between `Original`, `Clearer`, and `Simple`.
+- The current transition is intentionally minimal: instant replacement plus a brief highlight flash, not the final editorial animation.
+
 ## Codex Collaboration Notes
 
 - The user wants to learn agentic coding, so future sessions should explain material workflow decisions briefly.
