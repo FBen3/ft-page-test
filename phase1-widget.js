@@ -283,7 +283,7 @@
   }
 
   function buildTypeSamplerWidget(targets) {
-    var widget = createWidget(5, "Typeface reading level", "Type weight");
+    var widget = createWidget(5, "Typeface reading level", "Reading level");
     var body = document.createElement("div");
     var controls = document.createElement("div");
 

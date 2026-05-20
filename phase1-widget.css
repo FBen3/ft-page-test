@@ -267,14 +267,16 @@
 
 .reading-level-type-sampler {
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 2px;
 }
 
 .reading-level-type-sampler__glyph {
   border: 0;
   border-bottom: 2px solid transparent;
+  padding: 0 0 5px;
   background: transparent;
   color: var(--widget-ink);
   font-family: FinancierDisplay, Georgia, serif;
@@ -287,6 +289,10 @@
   border-bottom-color: var(--widget-accent);
   color: var(--widget-accent);
   opacity: 1;
+}
+
+.reading-level-widget[data-design="5"] .reading-level-visual-note {
+  text-align: center;
 }
 
 .reading-level-widget__status {
