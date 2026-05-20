@@ -249,7 +249,7 @@
   }
 
   function buildRingsWidget(targets) {
-    var widget = createWidget(4, "Ripple reading level", "Reach rings");
+    var widget = createWidget(4, "Ripple reading level", "Reading level");
     var body = document.createElement("div");
     var rings = document.createElement("div");
 

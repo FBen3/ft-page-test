@@ -79,7 +79,7 @@
 }
 
 .reading-level-widget__body {
-  padding: 8px;
+  padding: 10px;
 }
 
 .reading-level-widget__button {
@@ -126,7 +126,7 @@
 }
 
 .reading-level-visual-note {
-  margin: 10px 0 0;
+  margin: 5px 0 -5px;
   color: var(--widget-muted);
   font-size: 11px;
   line-height: 1.25;
@@ -236,7 +236,7 @@
 
 .reading-level-rings {
   position: relative;
-  width: 90px;
+  width: 75px;
   height: 90px;
   margin: 0 auto;
 }
@@ -247,7 +247,7 @@
   left: 50%;
   border: 1px solid var(--widget-ink);
   border-radius: 50%;
-  background: transparent;
+  background: var(--widget-paper);
   cursor: pointer;
   transform: translate(-50%, -50%);
 }
@@ -258,8 +258,11 @@
 
 .reading-level-rings__ring[aria-pressed="true"] {
   border-color: var(--widget-accent);
-  background: rgba(143, 23, 49, 0.18);
-  box-shadow: inset 0 0 0 999px rgba(143, 23, 49, 0.1);
+  background: var(--widget-accent);
+}
+
+.reading-level-widget[data-design="4"] .reading-level-visual-note {
+  text-align: center;
 }
 
 .reading-level-type-sampler {
