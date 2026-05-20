@@ -19,8 +19,8 @@
   border-radius: 0;
   background: transparent;
   color: #000000;
-  font: inherit;
-  font-size: 18px;
+  font-family: FinancierDisplay, Georgia, serif;
+  font-size: 10px;
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
@@ -75,6 +75,7 @@
 
 .reading-level-widget__button {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   padding: 10px 8px;
   border: 1px solid rgba(0, 0, 0, 0.16);
@@ -110,7 +111,6 @@
   border-color: var(--widget-accent);
   background: linear-gradient(180deg, var(--widget-accent) 0%, #6f1025 100%);
   color: #fff8ef;
-  transform: translateX(2px);
 }
 
 .reading-level-widget__status {
