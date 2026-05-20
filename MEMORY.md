@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-05-10
+Last updated: 2026-05-20
 
 ## Project Purpose
 
@@ -15,6 +15,9 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - `main.py`: placeholder Python script.
 - `pyproject.toml`: minimal Python project, currently no dependencies.
 - `PLAN.md`: implementation plan created for this feature.
+- `phase1-prototype.html`: static FT article prototype that loads the Phase 1 widget assets.
+- `phase1-widget.css`: widget styling for the left-rail prototype and five visual design slots.
+- `phase1-widget.js`: widget injection, level switching, and demo text replacement logic.
 
 ## Important DOM Findings
 
@@ -49,13 +52,14 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 
 ## Suggested Next Work
 
-- Create a Phase 1 static prototype against `example_page.html`.
-- Add a left-rail `Reading level` widget below the share rail.
-- Use hardcoded variants for the first 3 to 5 paragraphs.
-- Implement instant switching first, then add an editorial strike-through/replacement animation.
-- After the UI works, turn `main.py` into a precompute CLI that extracts article segments and generates `language_variants/<article-id>.json`.
+- Move to Phase 2: expand from the first four demo paragraphs to robust article segment handling.
+- Preserve non-text article elements and ensure repeated toggling does not accumulate markup.
+- After segment handling works, turn `main.py` into a precompute CLI that extracts article segments and generates `language_variants/<article-id>.json`.
+- Add the editorial strike-through/replacement animation after the switching model is stable.
 
-## Phase 1 Progress
+## Phase 1 Status
+
+Phase 1 is complete as a static DOM prototype.
 
 - `phase1-prototype.html` now exists as a readable prototype copy of the FT capture.
 - `phase1-widget.css` styles a left-rail `Reading level` widget intended to sit under the share rail.
@@ -64,6 +68,12 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - The widget is now mounted directly after `#article-progress` and wrapped with 1-5 design-slot controls for internal visual testing.
 - Design slot 1 is the original three-level `Original`/`Clearer`/`Simple` widget. Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
 - Until the project has real five-level generated text, slots 2-5 bridge their levels onto existing demo text: levels 1-2 use `Simple`, levels 3-4 use `Clearer`, and level 5 uses `Original`.
+- The five design slots were visually polished one at a time:
+- Slot 2 ink density: grey ink stays clipped inside circular controls.
+- Slot 3 thermometer/pilcrow: compact vertical bars ordered `5 4 3 2 1`, with level 5 as full editorial prose.
+- Slot 4 reach rings: bottom note is centered and the selected ring uses solid FT red.
+- Slot 5 type sampler: vertical `A` controls ordered top-to-bottom `1 2 3 4 5`.
+- Slot 1 should be left untouched unless the user explicitly asks; it is the baseline three-level control.
 
 ## Codex Collaboration Notes
 

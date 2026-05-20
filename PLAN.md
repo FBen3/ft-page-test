@@ -135,11 +135,20 @@ Implementation approach:
 
 ### Phase 1: Static DOM Prototype
 
-- Preserve `example_page.html` as source input if possible, and create a prototype copy or injected assets for experimentation.
-- Add a small JS module that finds `.share-nav__vertical` and appends a `Reading level` widget below it.
-- Add static mock variants for the first 3 to 5 paragraphs.
-- Implement level switching with instant text replacement first.
-- Add basic tracking logs via `console.info` so demo interactions are observable.
+Status: complete as of 2026-05-20.
+
+- Preserved `example_page.html` as the source capture and created `phase1-prototype.html` for experimentation.
+- Added `phase1-widget.js`, which finds `.share-nav__vertical`, inserts the prototype below `#article-progress`, and mounts the `Reading level` controls.
+- Added `phase1-widget.css` for the left-rail widget visuals.
+- Added static mock variants for the first four article paragraphs.
+- Implemented instant switching with a brief highlight flash and `console.info` interaction logs.
+- Added five internal visual design slots:
+- Slot 1: classic three-level `Original` / `Clearer` / `Simple`.
+- Slot 2: ink density circular controls.
+- Slot 3: compact thermometer bars ordered `5 4 3 2 1`.
+- Slot 4: reach rings with solid active fill.
+- Slot 5: vertical type sampler ordered `1 2 3 4 5`.
+- Current bridge for slots 2-5: levels 1-2 map to `Simple`, levels 3-4 map to `Clearer`, and level 5 maps to `Original`.
 
 ### Phase 2: Full Article Segment Handling
 
