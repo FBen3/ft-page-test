@@ -208,21 +208,18 @@
   }
 
   function buildPilcrowWidget(targets) {
-    var widget = createWidget(3, "Pilcrow reading level", "Paragraph mark");
+    var widget = createWidget(3, "Pilcrow reading level", "Reading level");
     var body = document.createElement("div");
     var row = document.createElement("div");
     var bars = document.createElement("div");
-    var mark = document.createElement("div");
 
     body.className = "reading-level-widget__body";
     row.className = "reading-level-pilcrow";
     bars.className = "reading-level-pilcrow__bars";
-    mark.className = "reading-level-pilcrow__mark";
-    mark.textContent = "¶";
 
-    FIVE_LEVELS.forEach(function (item) {
+    FIVE_LEVELS.slice().reverse().forEach(function (item) {
       var button = document.createElement("button");
-      var fillHeight = 12 + item.level * 15;
+      var fillHeight = 15 + (item.level - 1) * 18;
 
       button.type = "button";
       button.className = "reading-level-pilcrow__bar reading-level-control";
@@ -244,7 +241,6 @@
     });
 
     row.appendChild(bars);
-    row.appendChild(mark);
     body.appendChild(row);
     body.appendChild(buildLevelNote());
     widget.appendChild(body);

@@ -176,21 +176,21 @@
 .reading-level-pilcrow {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 0;
 }
 
 .reading-level-pilcrow__bars {
   display: flex;
   align-items: flex-end;
-  gap: 4px;
+  gap: 3px;
 }
 
 .reading-level-pilcrow__bar {
   position: relative;
-  width: 16px;
-  height: 58px;
+  width: 14px;
+  height: 52px;
   border: 1px solid var(--widget-ink);
-  border-radius: 8px;
+  border-radius: 7px;
   background: transparent;
   cursor: pointer;
   overflow: hidden;
@@ -226,11 +226,12 @@
   opacity: 1;
 }
 
-.reading-level-pilcrow__mark {
-  color: var(--widget-ink);
-  font-family: FinancierDisplay, Georgia, serif;
-  font-size: 31px;
-  line-height: 0.9;
+.reading-level-widget[data-design="3"] .reading-level-widget__header {
+  padding: 10px 9px 11px;
+}
+
+.reading-level-widget[data-design="3"] .reading-level-widget__body {
+  padding: 7px 8px 8px;
 }
 
 .reading-level-rings {
