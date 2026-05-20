@@ -62,6 +62,8 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - `phase1-widget.js` mounts the widget into `.share-nav__vertical`, stores original paragraph HTML, and swaps the first four article paragraphs between `Original`, `Clearer`, and `Simple`.
 - The current transition is intentionally minimal: instant replacement plus a brief highlight flash, not the final editorial animation.
 - The widget is now mounted directly after `#article-progress` and wrapped with 1-5 design-slot controls for internal visual testing.
+- Design slot 1 is the original three-level `Original`/`Clearer`/`Simple` widget. Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
+- Until the project has real five-level generated text, slots 2-5 bridge their levels onto existing demo text: levels 1-2 use `Simple`, levels 3-4 use `Clearer`, and level 5 uses `Original`.
 
 ## Codex Collaboration Notes
 

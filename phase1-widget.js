@@ -8,9 +8,18 @@
     "#article-body > p:nth-of-type(3)",
     "#article-body > p:nth-of-type(4)"
   ];
-  var TARGET_LEVELS = ["original", "clearer", "simple"];
+
   var DESIGN_SLOTS = [1, 2, 3, 4, 5];
-  var DEFAULT_LEVEL = "original";
+  var ARTICLE_LEVELS = ["original", "clearer", "simple"];
+  var FIVE_LEVELS = [
+    { level: 1, label: "Essential", note: "Core facts only", articleLevel: "simple" },
+    { level: 2, label: "Plain", note: "Plain language", articleLevel: "simple" },
+    { level: 3, label: "Simple", note: "Everyday vocabulary", articleLevel: "clearer" },
+    { level: 4, label: "Clearer", note: "Shorter sentences", articleLevel: "clearer" },
+    { level: 5, label: "Original", note: "Full editorial prose", articleLevel: "original" }
+  ];
+  var DEFAULT_ARTICLE_LEVEL = "original";
+  var DEFAULT_COMPLEXITY_LEVEL = 5;
   var DEFAULT_DESIGN = "1";
   var UPDATED_CLASS = "reading-level-target--updated";
   var UPDATE_FLASH_MS = 520;
@@ -53,10 +62,10 @@
       target.dataset.originalHtml = target.innerHTML;
     });
 
-    mountPrototypeControls(rail, buildWidget(targets));
+    mountPrototypeControls(rail, buildWidgets(targets));
     console.info("[reading-level] Phase 1 widget mounted.", {
       targets: targets.length,
-      levels: TARGET_LEVELS.slice()
+      designs: DESIGN_SLOTS.slice()
     });
   }
 
@@ -66,14 +75,16 @@
     }).filter(Boolean);
   }
 
-  function mountPrototypeControls(rail, widget) {
+  function mountPrototypeControls(rail, widgets) {
     var prototype = document.createElement("div");
     var progress = rail.querySelector(PROGRESS_SELECTOR);
 
     prototype.className = "reading-level-prototype";
     prototype.dataset.design = DEFAULT_DESIGN;
+    prototype.dataset.articleLevel = DEFAULT_ARTICLE_LEVEL;
+    prototype.dataset.complexityLevel = String(DEFAULT_COMPLEXITY_LEVEL);
     prototype.appendChild(buildDesignSlots(prototype));
-    prototype.appendChild(widget);
+    prototype.appendChild(widgets);
 
     if (progress) {
       progress.insertAdjacentElement("afterend", prototype);
@@ -108,52 +119,235 @@
     return slots;
   }
 
-  function buildWidget(targets) {
+  function buildWidgets(targets) {
+    var widgets = document.createElement("div");
+    widgets.className = "reading-level-widgets";
+    widgets.appendChild(buildClassicWidget(targets));
+    widgets.appendChild(buildInkDialWidget(targets));
+    widgets.appendChild(buildPilcrowWidget(targets));
+    widgets.appendChild(buildRingsWidget(targets));
+    widgets.appendChild(buildTypeSamplerWidget(targets));
+    return widgets;
+  }
+
+  function createWidget(design, label, title) {
     var widget = document.createElement("section");
     widget.className = "reading-level-widget";
-    widget.setAttribute("aria-label", "Reading level");
+    widget.dataset.design = String(design);
+    widget.setAttribute("aria-label", label);
+    widget.appendChild(buildWidgetHeader(title));
+    return widget;
+  }
 
+  function buildWidgetHeader(title) {
     var header = document.createElement("div");
     header.className = "reading-level-widget__header";
-    header.innerHTML = '<span class="reading-level-widget__title">Reading level</span>';
+    header.innerHTML = '<span class="reading-level-widget__title">' + title + "</span>";
+    return header;
+  }
 
+  function buildClassicWidget(targets) {
+    var widget = createWidget(1, "Reading level", "Reading level");
     var body = document.createElement("div");
     body.className = "reading-level-widget__body";
 
-    var status = document.createElement("p");
-    status.className = "reading-level-widget__status";
-    status.setAttribute("aria-live", "polite");
-    status.textContent = "Article language remains at Original.";
-
-    TARGET_LEVELS.forEach(function (level) {
+    ARTICLE_LEVELS.forEach(function (level) {
       var button = document.createElement("button");
       button.type = "button";
-      button.className = "reading-level-widget__button";
-      button.dataset.level = level;
-      button.setAttribute("aria-pressed", level === DEFAULT_LEVEL ? "true" : "false");
-      button.textContent = labelForLevel(level);
+      button.className = "reading-level-widget__button reading-level-control";
+      button.dataset.articleLevel = level;
+      button.setAttribute("aria-pressed", level === DEFAULT_ARTICLE_LEVEL ? "true" : "false");
+      button.textContent = labelForArticleLevel(level);
       button.addEventListener("click", function () {
-        applyLevel(level, targets, widget, status);
+        applyArticleLevel(level, complexityForArticleLevel(level), targets, widget);
       });
       body.appendChild(button);
     });
 
-    widget.appendChild(header);
     widget.appendChild(body);
-    widget.appendChild(status);
+    widget.appendChild(buildStatusNode());
     return widget;
   }
 
-  function applyLevel(level, targets, widget, status) {
-    var nextHtml = demoVariants[level] || {};
-    var activeLevel = widget.dataset.activeLevel || DEFAULT_LEVEL;
+  function buildInkDialWidget(targets) {
+    var widget = createWidget(2, "Ink density reading level", "Ink density");
+    var body = document.createElement("div");
+    var controls = document.createElement("div");
 
-    if (activeLevel === level) {
+    body.className = "reading-level-widget__body";
+    controls.className = "reading-level-ink-dials";
+
+    FIVE_LEVELS.forEach(function (item) {
+      var button = document.createElement("button");
+      var size = 6 + item.level * 6;
+
+      button.type = "button";
+      button.className = "reading-level-ink-dial reading-level-control";
+      button.dataset.level = String(item.level);
+      button.dataset.articleLevel = item.articleLevel;
+      button.setAttribute("aria-label", item.label);
+      button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
+      button.title = item.label;
+      button.innerHTML =
+        '<span class="reading-level-ink-dial__fill" style="width:' +
+        size +
+        "px;height:" +
+        size +
+        'px"></span>';
+      button.addEventListener("click", function () {
+        applyArticleLevel(item.articleLevel, item.level, targets, widget);
+      });
+      controls.appendChild(button);
+    });
+
+    body.appendChild(controls);
+    body.appendChild(buildLevelNote());
+    widget.appendChild(body);
+    widget.appendChild(buildStatusNode());
+    return widget;
+  }
+
+  function buildPilcrowWidget(targets) {
+    var widget = createWidget(3, "Pilcrow reading level", "Paragraph mark");
+    var body = document.createElement("div");
+    var row = document.createElement("div");
+    var bars = document.createElement("div");
+    var mark = document.createElement("div");
+
+    body.className = "reading-level-widget__body";
+    row.className = "reading-level-pilcrow";
+    bars.className = "reading-level-pilcrow__bars";
+    mark.className = "reading-level-pilcrow__mark";
+    mark.textContent = "¶";
+
+    FIVE_LEVELS.forEach(function (item) {
+      var button = document.createElement("button");
+      var fillHeight = 12 + item.level * 15;
+
+      button.type = "button";
+      button.className = "reading-level-pilcrow__bar reading-level-control";
+      button.dataset.level = String(item.level);
+      button.dataset.articleLevel = item.articleLevel;
+      button.setAttribute("aria-label", item.label);
+      button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
+      button.title = item.label;
+      button.innerHTML =
+        '<span class="reading-level-pilcrow__fill" style="height:' +
+        fillHeight +
+        '%"></span><span class="reading-level-pilcrow__number">' +
+        item.level +
+        "</span>";
+      button.addEventListener("click", function () {
+        applyArticleLevel(item.articleLevel, item.level, targets, widget);
+      });
+      bars.appendChild(button);
+    });
+
+    row.appendChild(bars);
+    row.appendChild(mark);
+    body.appendChild(row);
+    body.appendChild(buildLevelNote());
+    widget.appendChild(body);
+    widget.appendChild(buildStatusNode());
+    return widget;
+  }
+
+  function buildRingsWidget(targets) {
+    var widget = createWidget(4, "Ripple reading level", "Reach rings");
+    var body = document.createElement("div");
+    var rings = document.createElement("div");
+
+    body.className = "reading-level-widget__body";
+    rings.className = "reading-level-rings";
+
+    FIVE_LEVELS.slice().reverse().forEach(function (item, index) {
+      var button = document.createElement("button");
+      var diameter = 84 - index * 14;
+
+      button.type = "button";
+      button.className = "reading-level-rings__ring reading-level-control";
+      button.dataset.level = String(item.level);
+      button.dataset.articleLevel = item.articleLevel;
+      button.style.width = diameter + "px";
+      button.style.height = diameter + "px";
+      button.setAttribute("aria-label", item.label);
+      button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
+      button.title = item.label;
+      button.addEventListener("click", function () {
+        applyArticleLevel(item.articleLevel, item.level, targets, widget);
+      });
+      rings.appendChild(button);
+    });
+
+    body.appendChild(rings);
+    body.appendChild(buildLevelNote());
+    widget.appendChild(body);
+    widget.appendChild(buildStatusNode());
+    return widget;
+  }
+
+  function buildTypeSamplerWidget(targets) {
+    var widget = createWidget(5, "Typeface reading level", "Type weight");
+    var body = document.createElement("div");
+    var controls = document.createElement("div");
+
+    body.className = "reading-level-widget__body";
+    controls.className = "reading-level-type-sampler";
+
+    FIVE_LEVELS.forEach(function (item) {
+      var button = document.createElement("button");
+
+      button.type = "button";
+      button.className = "reading-level-type-sampler__glyph reading-level-control";
+      button.dataset.level = String(item.level);
+      button.dataset.articleLevel = item.articleLevel;
+      button.style.fontSize = 10 + item.level * 4 + "px";
+      button.style.fontWeight = 250 + item.level * 120;
+      button.setAttribute("aria-label", item.label);
+      button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
+      button.title = item.label;
+      button.textContent = "A";
+      button.addEventListener("click", function () {
+        applyArticleLevel(item.articleLevel, item.level, targets, widget);
+      });
+      controls.appendChild(button);
+    });
+
+    body.appendChild(controls);
+    body.appendChild(buildLevelNote());
+    widget.appendChild(body);
+    widget.appendChild(buildStatusNode());
+    return widget;
+  }
+
+  function buildLevelNote() {
+    var note = document.createElement("p");
+    note.className = "reading-level-visual-note";
+    note.dataset.readingLevelNote = "true";
+    note.textContent = noteForComplexity(DEFAULT_COMPLEXITY_LEVEL);
+    return note;
+  }
+
+  function buildStatusNode() {
+    var status = document.createElement("p");
+    status.className = "reading-level-widget__status";
+    status.setAttribute("aria-live", "polite");
+    status.textContent = "Article language remains at Original.";
+    return status;
+  }
+
+  function applyArticleLevel(articleLevel, complexityLevel, targets, widget) {
+    var nextHtml = demoVariants[articleLevel] || {};
+    var prototype = widget.closest(".reading-level-prototype");
+    var activeArticleLevel = prototype ? prototype.dataset.articleLevel : DEFAULT_ARTICLE_LEVEL;
+    var activeComplexity = prototype ? prototype.dataset.complexityLevel : String(DEFAULT_COMPLEXITY_LEVEL);
+
+    if (activeArticleLevel === articleLevel && activeComplexity === String(complexityLevel)) {
       return;
     }
 
     targets.forEach(function (target, index) {
-      var html = level === DEFAULT_LEVEL ? target.dataset.originalHtml : nextHtml[index];
+      var html = articleLevel === DEFAULT_ARTICLE_LEVEL ? target.dataset.originalHtml : nextHtml[index];
 
       if (!html || target.innerHTML === html) {
         return;
@@ -168,15 +362,44 @@
       }, UPDATE_FLASH_MS);
     });
 
-    widget.dataset.activeLevel = level;
-    syncButtons(widget, level);
-    status.textContent = "Article language changed to " + labelForLevel(level) + ".";
-    console.info("[reading-level] Level changed.", { level: level });
+    if (prototype) {
+      prototype.dataset.articleLevel = articleLevel;
+      prototype.dataset.complexityLevel = String(complexityLevel);
+      syncControls(prototype, articleLevel, complexityLevel);
+      syncLevelNotes(prototype, complexityLevel);
+      syncStatuses(prototype, articleLevel, complexityLevel);
+    }
+
+    console.info("[reading-level] Level changed.", {
+      articleLevel: articleLevel,
+      complexityLevel: complexityLevel
+    });
   }
 
-  function syncButtons(widget, level) {
-    widget.querySelectorAll(".reading-level-widget__button").forEach(function (button) {
-      button.setAttribute("aria-pressed", String(button.dataset.level === level));
+  function syncControls(root, articleLevel, complexityLevel) {
+    root.querySelectorAll(".reading-level-control").forEach(function (button) {
+      var isPressed = button.dataset.level
+        ? button.dataset.level === String(complexityLevel)
+        : button.dataset.articleLevel === articleLevel;
+
+      button.setAttribute("aria-pressed", String(isPressed));
+    });
+  }
+
+  function syncLevelNotes(root, complexityLevel) {
+    root.querySelectorAll("[data-reading-level-note]").forEach(function (note) {
+      note.textContent = noteForComplexity(complexityLevel);
+    });
+  }
+
+  function syncStatuses(root, articleLevel, complexityLevel) {
+    root.querySelectorAll(".reading-level-widget__status").forEach(function (status) {
+      status.textContent =
+        "Reading level changed to " +
+        labelForComplexity(complexityLevel) +
+        " (" +
+        labelForArticleLevel(articleLevel) +
+        " demo text).";
     });
   }
 
@@ -186,7 +409,19 @@
     });
   }
 
-  function labelForLevel(level) {
+  function complexityForArticleLevel(articleLevel) {
+    if (articleLevel === "simple") {
+      return 1;
+    }
+
+    if (articleLevel === "clearer") {
+      return 3;
+    }
+
+    return 5;
+  }
+
+  function labelForArticleLevel(level) {
     if (level === "clearer") {
       return "Clearer";
     }
@@ -196,5 +431,21 @@
     }
 
     return "Original";
+  }
+
+  function labelForComplexity(level) {
+    var match = FIVE_LEVELS.filter(function (item) {
+      return item.level === Number(level);
+    })[0];
+
+    return match ? match.label : "Original";
+  }
+
+  function noteForComplexity(level) {
+    var match = FIVE_LEVELS.filter(function (item) {
+      return item.level === Number(level);
+    })[0];
+
+    return match ? match.note : "Full editorial prose";
   }
 })();
