@@ -1,6 +1,7 @@
 (function () {
   var ARTICLE_SELECTOR = "#article-body";
   var RAIL_SELECTOR = ".share-nav__vertical";
+  var PROGRESS_SELECTOR = "#article-progress";
   var TARGET_SELECTORS = [
     "#article-body > p:nth-of-type(1)",
     "#article-body > p:nth-of-type(2)",
@@ -8,7 +9,9 @@
     "#article-body > p:nth-of-type(4)"
   ];
   var TARGET_LEVELS = ["original", "clearer", "simple"];
+  var DESIGN_SLOTS = [1, 2, 3, 4, 5];
   var DEFAULT_LEVEL = "original";
+  var DEFAULT_DESIGN = "1";
   var UPDATED_CLASS = "reading-level-target--updated";
   var UPDATE_FLASH_MS = 520;
 
@@ -50,7 +53,7 @@
       target.dataset.originalHtml = target.innerHTML;
     });
 
-    rail.appendChild(buildWidget(targets));
+    mountPrototypeControls(rail, buildWidget(targets));
     console.info("[reading-level] Phase 1 widget mounted.", {
       targets: targets.length,
       levels: TARGET_LEVELS.slice()
@@ -63,6 +66,48 @@
     }).filter(Boolean);
   }
 
+  function mountPrototypeControls(rail, widget) {
+    var prototype = document.createElement("div");
+    var progress = rail.querySelector(PROGRESS_SELECTOR);
+
+    prototype.className = "reading-level-prototype";
+    prototype.dataset.design = DEFAULT_DESIGN;
+    prototype.appendChild(buildDesignSlots(prototype));
+    prototype.appendChild(widget);
+
+    if (progress) {
+      progress.insertAdjacentElement("afterend", prototype);
+      return;
+    }
+
+    rail.appendChild(prototype);
+  }
+
+  function buildDesignSlots(prototype) {
+    var slots = document.createElement("div");
+    slots.className = "reading-level-design-slots";
+    slots.setAttribute("aria-label", "Widget design options");
+
+    DESIGN_SLOTS.forEach(function (slot) {
+      var button = document.createElement("button");
+      var design = String(slot);
+
+      button.type = "button";
+      button.className = "reading-level-design-slots__button";
+      button.dataset.design = design;
+      button.setAttribute("aria-pressed", design === DEFAULT_DESIGN ? "true" : "false");
+      button.textContent = design;
+      button.addEventListener("click", function () {
+        prototype.dataset.design = design;
+        syncDesignSlots(slots, design);
+        console.info("[reading-level] Design slot selected.", { design: design });
+      });
+      slots.appendChild(button);
+    });
+
+    return slots;
+  }
+
   function buildWidget(targets) {
     var widget = document.createElement("section");
     widget.className = "reading-level-widget";
@@ -70,9 +115,7 @@
 
     var header = document.createElement("div");
     header.className = "reading-level-widget__header";
-    header.innerHTML =
-      '<span class="reading-level-widget__eyebrow">Aa</span>' +
-      '<span class="reading-level-widget__title">Reading level</span>';
+    header.innerHTML = '<span class="reading-level-widget__title">Reading level</span>';
 
     var body = document.createElement("div");
     body.className = "reading-level-widget__body";
@@ -95,11 +138,6 @@
       body.appendChild(button);
     });
 
-    var note = document.createElement("p");
-    note.className = "reading-level-widget__note";
-    note.textContent = "Phase 1 demo changes the first four paragraphs only.";
-
-    body.appendChild(note);
     widget.appendChild(header);
     widget.appendChild(body);
     widget.appendChild(status);
@@ -139,6 +177,12 @@
   function syncButtons(widget, level) {
     widget.querySelectorAll(".reading-level-widget__button").forEach(function (button) {
       button.setAttribute("aria-pressed", String(button.dataset.level === level));
+    });
+  }
+
+  function syncDesignSlots(slots, design) {
+    slots.querySelectorAll(".reading-level-design-slots__button").forEach(function (button) {
+      button.setAttribute("aria-pressed", String(button.dataset.design === design));
     });
   }
 

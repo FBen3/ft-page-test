@@ -61,6 +61,7 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - `phase1-widget.css` styles a left-rail `Reading level` widget intended to sit under the share rail.
 - `phase1-widget.js` mounts the widget into `.share-nav__vertical`, stores original paragraph HTML, and swaps the first four article paragraphs between `Original`, `Clearer`, and `Simple`.
 - The current transition is intentionally minimal: instant replacement plus a brief highlight flash, not the final editorial animation.
+- The widget is now mounted directly after `#article-progress` and wrapped with 1-5 design-slot controls for internal visual testing.
 
 ## Codex Collaboration Notes
 
