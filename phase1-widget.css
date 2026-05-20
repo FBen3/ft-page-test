@@ -139,22 +139,29 @@
 }
 
 .reading-level-ink-dial {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 31px;
   width: 31px;
   height: 31px;
   border: 1px solid var(--widget-ink);
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .reading-level-ink-dial__fill {
   display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   border-radius: 50%;
   background: var(--widget-ink);
   opacity: 0.28;
+  transform: translate(-50%, -50%);
 }
 
 .reading-level-ink-dial[aria-pressed="true"] {

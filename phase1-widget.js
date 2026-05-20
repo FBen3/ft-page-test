@@ -170,7 +170,7 @@
   }
 
   function buildInkDialWidget(targets) {
-    var widget = createWidget(2, "Ink density reading level", "Ink density");
+    var widget = createWidget(2, "Ink density reading level", "Reading level");
     var body = document.createElement("div");
     var controls = document.createElement("div");
 
@@ -179,7 +179,7 @@
 
     FIVE_LEVELS.forEach(function (item) {
       var button = document.createElement("button");
-      var size = 6 + item.level * 6;
+      var size = 7 + item.level * 4;
 
       button.type = "button";
       button.className = "reading-level-ink-dial reading-level-control";
