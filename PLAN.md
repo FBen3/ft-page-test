@@ -208,6 +208,10 @@ Build Phase 1 directly against the captured FT page:
 
 This gets a visual demo quickly. After that, add the OpenAI-backed precompute pipeline.
 
+## Good To Do Later
+
+- Rename remaining internal `pilcrow` identifiers in `phase1-widget.js` and `phase1-widget.css` to `thermometer`. The actual pilcrow symbol has been removed from the UI, so the current naming is only historical and could confuse future sessions.
+
 ## Codex Workflow Notes
 
 - This task is currently best handled by one agent because the repo is tiny and the first work is tightly coupled.
