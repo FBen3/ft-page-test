@@ -134,6 +134,7 @@
 
 .reading-level-ink-dials {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 6px;
 }
@@ -151,6 +152,10 @@
   background: transparent;
   cursor: pointer;
   overflow: hidden;
+}
+
+.reading-level-widget[data-design="2"] .reading-level-visual-note {
+  text-align: center;
 }
 
 .reading-level-ink-dial__fill {
