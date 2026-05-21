@@ -140,7 +140,7 @@ Status: complete as of 2026-05-20.
 - Preserved `example_page.html` as the source capture and created `phase1-prototype.html` for experimentation.
 - Added `phase1-widget.js`, which finds `.share-nav__vertical`, inserts the prototype below `#article-progress`, and mounts the `Reading level` controls.
 - Added `phase1-widget.css` for the left-rail widget visuals.
-- Added static mock variants for the first four article paragraphs.
+- Added static mock variants for the first four article paragraphs, later expanded in Phase 2.
 - Implemented instant switching with a brief highlight flash and `console.info` interaction logs.
 - Added five internal visual design slots:
 - Slot 1: classic three-level `Original` / `Clearer` / `Simple`.
@@ -152,11 +152,15 @@ Status: complete as of 2026-05-20.
 
 ### Phase 2: Full Article Segment Handling
 
-- Extract all eligible article text nodes from `#article-body`.
-- Handle `p`, `blockquote`, and optionally captions.
-- Preserve non-text article elements such as images, Flourish embeds, email links, and onward-journey components.
-- Store original segment HTML on page load so `Original` can always restore the published version.
-- Ensure toggling repeatedly between levels does not accumulate nested spans or markup.
+Status: complete for the static prototype as of 2026-05-21.
+
+- Extracts eligible article text segments from `#article-body` instead of using a hardcoded first-four-paragraph selector list.
+- Handles direct article paragraphs, non-hidden blockquotes, and figure captions as segment candidates.
+- Preserves non-text and utility elements such as images, Flourish embeds, email links, hidden pullquote duplicates, and social/newsletter promo text.
+- Stores original segment HTML in memory on page load so `Original` can always restore the published version.
+- Ensures repeated toggling between levels does not accumulate nested spans or replacement markup.
+- Expands handcrafted `Clearer` and `Simple` demo variants to the 11 main editorial paragraphs in the captured article.
+- Keeps real generated segment assets as Phase 3 work.
 
 ### Phase 3: Precompute Script
 

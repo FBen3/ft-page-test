@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-05-20
+Last updated: 2026-05-21
 
 ## Project Purpose
 
@@ -52,9 +52,8 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 
 ## Suggested Next Work
 
-- Move to Phase 2: expand from the first four demo paragraphs to robust article segment handling.
-- Preserve non-text article elements and ensure repeated toggling does not accumulate markup.
-- After segment handling works, turn `main.py` into a precompute CLI that extracts article segments and generates `language_variants/<article-id>.json`.
+- Move to Phase 3: turn `main.py` into a precompute CLI that extracts article segments and generates `language_variants/<article-id>.json`.
+- Keep the browser prototype reading precomputed segment variants; do not call OpenAI from browser code.
 - Add the editorial strike-through/replacement animation after the switching model is stable.
 
 ## Phase 1 Status
@@ -63,7 +62,7 @@ Phase 1 is complete as a static DOM prototype.
 
 - `phase1-prototype.html` now exists as a readable prototype copy of the FT capture.
 - `phase1-widget.css` styles a left-rail `Reading level` widget intended to sit under the share rail.
-- `phase1-widget.js` mounts the widget into `.share-nav__vertical`, stores original paragraph HTML, and swaps the first four article paragraphs between `Original`, `Clearer`, and `Simple`.
+- `phase1-widget.js` mounts the widget into `.share-nav__vertical`; Phase 1 started with the first four paragraphs, and Phase 2 now expands this into segment-based article switching.
 - The current transition is intentionally minimal: instant replacement plus a brief highlight flash, not the final editorial animation.
 - The widget is now mounted directly after `#article-progress` and wrapped with 1-5 design-slot controls for internal visual testing.
 - Design slot 1 is the original three-level `Original`/`Clearer`/`Simple` widget. Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
@@ -74,6 +73,18 @@ Phase 1 is complete as a static DOM prototype.
 - Slot 4 reach rings: bottom note is centered and the selected ring uses solid FT red.
 - Slot 5 type sampler: vertical `A` controls ordered top-to-bottom `1 2 3 4 5`.
 - Slot 1 should be left untouched unless the user explicitly asks; it is the baseline three-level control.
+
+## Phase 2 Status
+
+Phase 2 is complete for the static browser prototype.
+
+- `phase1-widget.js` no longer hardcodes the first four paragraph selectors. It now collects eligible article segments from `#article-body`.
+- Segment ids are stable by segment type, for example `p-001`, `caption-001`, and `blockquote-001`.
+- Eligible segments include direct article paragraphs, non-hidden blockquotes, and figure captions. The current page skips the email line, social-follow promo paragraph, hidden pullquote duplicate, and Flourish/error-message content.
+- Original HTML is stored in memory per segment so toggling back to `Original` restores clean published markup instead of accumulating nested spans or replacement markup.
+- Demo `Clearer` and `Simple` variants now cover the 11 main editorial paragraphs in the captured article.
+- Images, embeds, email links, and social/newsletter utility text are preserved rather than rewritten.
+- Phase 3 still needs the real precompute pipeline and JSON asset format so future articles do not rely on hardcoded demo variants.
 
 ## Codex Collaboration Notes
 
