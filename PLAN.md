@@ -135,7 +135,7 @@ Implementation approach:
 
 ### Phase 1: Static DOM Prototype
 
-Status: complete as of 2026-05-20.
+Status: COMPLETED as of 2026-05-20.
 
 - Preserved `example_page.html` as the source capture and created `phase1-prototype.html` for experimentation.
 - Added `phase1-widget.js`, which finds `.share-nav__vertical`, inserts the prototype below `#article-progress`, and mounts the `Reading level` controls.
@@ -152,7 +152,7 @@ Status: complete as of 2026-05-20.
 
 ### Phase 2: Full Article Segment Handling
 
-Status: complete for the static prototype as of 2026-05-21.
+Status: COMPLETED for the static prototype as of 2026-05-21.
 
 - Extracts eligible article text segments from `#article-body` instead of using a hardcoded first-four-paragraph selector list.
 - Handles direct article paragraphs, non-hidden blockquotes, and figure captions as segment candidates.
