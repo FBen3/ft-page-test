@@ -5,8 +5,8 @@
 Build a desktop-only FT article-page widget that lets readers switch between three language complexity levels:
 
 - `Original`: the published article, default state.
-- `Clearer`: slightly simpler language while preserving the author's meaning, tone, argument, structure, and style.
-- `Simple`: substantially simpler language for a high-school-level reader, still preserving meaning, tone, and key FT style.
+- `Simple`: slightly simpler language while preserving the author's meaning, tone, argument, structure, and style.
+- `Basic`: substantially simpler language for a high-school-level reader, still preserving meaning, tone, and key FT style.
 
 The reader interaction should feel instant. Alternate versions should be precomputed before the reader clicks, and switching levels 
 should trigger an editorial-feeling text transformation animation rather than a plain text swap.
@@ -26,8 +26,8 @@ Avoid labels like "Hard", "Medium", and "Easy" in the UI. They are clear interna
 A better first pass:
 
 - `Original`
-- `Clearer`
 - `Simple`
+- `Basic`
 
 Widget name options:
 
@@ -69,14 +69,14 @@ Suggested precomputed asset shape:
 {
   "articleId": "ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6",
   "generatedAt": "2026-05-10T00:00:00Z",
-  "levels": ["original", "clearer", "simple"],
+  "levels": ["original", "simple", "basic"],
   "segments": [
     {
       "id": "p-001",
       "selector": "#article-body > p:nth-of-type(1)",
       "originalHtml": "Does another city on Earth...",
-      "clearerHtml": "Does any other city on Earth...",
-      "simpleHtml": "Is there another city that annoys people this much?",
+      "simpleHtml": "Does any other city on Earth...",
+      "basicHtml": "Is there another city that annoys people this much?",
       "lockedTerms": ["London", "American", "Russian"],
       "warnings": []
     }
@@ -154,12 +154,12 @@ Status: COMPLETED as of 2026-05-20.
 - Added static mock variants for the first four article paragraphs, later expanded in Phase 2.
 - Implemented instant switching with a brief highlight flash and `console.info` interaction logs.
 - Added five internal visual design slots:
-- Slot 1: classic three-level `Original` / `Clearer` / `Simple`.
+- Slot 1: classic three-level `Original` / `Simple` / `Basic`.
 - Slot 2: ink density circular controls.
 - Slot 3: compact thermometer bars ordered `5 4 3 2 1`.
 - Slot 4: reach rings with solid active fill.
 - Slot 5: vertical type sampler ordered `1 2 3 4 5`.
-- Current bridge for slots 2-5: levels 1-2 map to `Simple`, levels 3-4 map to `Clearer`, and level 5 maps to `Original`.
+- Current bridge for slots 2-5: levels 1-2 map to `Basic`, levels 3-4 map to `Simple`, and level 5 maps to `Original`.
 
 ### Phase 2: Full Article Segment Handling
 
@@ -170,7 +170,7 @@ Status: COMPLETED for the static prototype as of 2026-05-21.
 - Preserves non-text and utility elements such as images, Flourish embeds, email links, hidden pullquote duplicates, and social/newsletter promo text.
 - Stores original segment HTML in memory on page load so `Original` can always restore the published version.
 - Ensures repeated toggling between levels does not accumulate nested spans or replacement markup.
-- Expands handcrafted `Clearer` and `Simple` demo variants to the 11 main editorial paragraphs in the captured article.
+- Expands handcrafted `Simple` and `Basic` demo variants to the 11 main editorial paragraphs in the captured article.
 - Keeps real generated segment assets as Phase 3 work.
 
 ### Phase 3: Precomputed Variant Data
@@ -181,7 +181,7 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 
 - Created a `language_variants/` folder.
 - Define the JSON contract for one article's segment variants.
-- Moved the current handcrafted `Clearer` and `Simple` variants out of `phase1-widget.js` into `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
+- Moved the current handcrafted `Simple` and `Basic` variants out of `phase1-widget.js` into `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
 - Updated `phase1-widget.js` to load the JSON file and fall back safely if variants are unavailable.
 - The page should be served over HTTP, for example through static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
 - Keep a small local script or helper workflow for extracting/writing variant JSON, but treat it as behind-the-scenes generation plumbing, not the user-facing demo.
@@ -217,7 +217,7 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 
 - Is the hackathon demo expected to modify the static `example_page.html`, or should we create a separate prototype page that imports it?
 - Should captions and pull quotes be simplified, or only article body paragraphs?
-- Should `Simple` preserve FT house style closely, or is clarity more important than style at that level?
+- Should `Basic` preserve FT house style closely, or is clarity more important than style at that level?
 - Is the target future integration the FT article app, a browser extension, or a standalone demo?
 - Do we want one generated rewrite per paragraph, or should the model rewrite with full article context and output segment-aligned results?
 

@@ -6,12 +6,12 @@
   var VARIANT_BASE_PATH = "./language_variants/";
 
   var DESIGN_SLOTS = [1, 2, 3, 4, 5];
-  var ARTICLE_LEVELS = ["original", "clearer", "simple"];
+  var ARTICLE_LEVELS = ["original", "simple", "basic"];
   var FIVE_LEVELS = [
-    { level: 1, label: "Essential", note: "Core facts only", articleLevel: "simple" },
-    { level: 2, label: "Plain", note: "Plain language", articleLevel: "simple" },
-    { level: 3, label: "Simple", note: "Everyday vocabulary", articleLevel: "clearer" },
-    { level: 4, label: "Clearer", note: "Shorter sentences", articleLevel: "clearer" },
+    { level: 1, label: "Essential", note: "Core facts only", articleLevel: "basic" },
+    { level: 2, label: "Basic", note: "Plain language", articleLevel: "basic" },
+    { level: 3, label: "Plain", note: "Everyday vocabulary", articleLevel: "simple" },
+    { level: 4, label: "Simple", note: "Shorter sentences", articleLevel: "simple" },
     { level: 5, label: "Original", note: "Full editorial prose", articleLevel: "original" }
   ];
   var DEFAULT_ARTICLE_LEVEL = "original";
@@ -130,12 +130,12 @@
         return;
       }
 
-      if (segment.clearerHtml) {
-        variants.clearer[segment.id] = segment.clearerHtml;
-      }
-
       if (segment.simpleHtml) {
         variants.simple[segment.id] = segment.simpleHtml;
+      }
+
+      if (segment.basicHtml) {
+        variants.basic[segment.id] = segment.basicHtml;
       }
     });
 
@@ -597,11 +597,11 @@
   }
 
   function complexityForArticleLevel(articleLevel) {
-    if (articleLevel === "simple") {
+    if (articleLevel === "basic") {
       return 1;
     }
 
-    if (articleLevel === "clearer") {
+    if (articleLevel === "simple") {
       return 3;
     }
 
@@ -609,12 +609,12 @@
   }
 
   function labelForArticleLevel(level) {
-    if (level === "clearer") {
-      return "Clearer";
-    }
-
     if (level === "simple") {
       return "Simple";
+    }
+
+    if (level === "basic") {
+      return "Basic";
     }
 
     return "Original";

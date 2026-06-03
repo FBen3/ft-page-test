@@ -6,7 +6,7 @@ Last updated: 2026-06-03
 
 This repo is being used for an FT hackathon prototype and as a learning project for agentic coding with Codex.
 
-The product goal is a desktop FT article-page widget that lets readers switch article language complexity between `Original`, `Clearer`, and `Simple`. The feature should reduce comprehension barriers for younger or less expert readers while preserving FT meaning, tone, and style.
+The product goal is a desktop FT article-page widget that lets readers switch article language complexity between `Original`, `Simple`, and `Basic`. The feature should reduce comprehension barriers for younger or less expert readers while preserving FT meaning, tone, and style.
 
 ## Current Files
 
@@ -29,7 +29,7 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 
 ## Product Decisions So Far
 
-- Use user-facing labels `Original`, `Clearer`, and `Simple` instead of `Hard`, `Medium`, and `Easy`.
+- Use user-facing labels `Original`, `Simple`, and `Basic` instead of `Hard`, `Medium`, and `Easy`.
 - Keep `Original` as the default.
 - Alternate article versions should be precomputed so clicks feel instant.
 - Do not call OpenAI from browser code.
@@ -71,8 +71,8 @@ Phase 1 is complete as a static DOM prototype.
 - `phase1-widget.js` mounts the widget into `.share-nav__vertical`; Phase 1 started with the first four paragraphs, and Phase 2 now expands this into segment-based article switching.
 - The current transition is intentionally minimal: instant replacement plus a brief highlight flash, not the final editorial animation.
 - The widget is now mounted directly after `#article-progress` and wrapped with 1-5 design-slot controls for internal visual testing.
-- Design slot 1 is the original three-level `Original`/`Clearer`/`Simple` widget. Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
-- Until the project has real five-level generated text, slots 2-5 bridge their levels onto existing demo text: levels 1-2 use `Simple`, levels 3-4 use `Clearer`, and level 5 uses `Original`.
+- Design slot 1 is the original three-level `Original`/`Simple`/`Basic` widget. Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
+- Until the project has real five-level generated text, slots 2-5 bridge their levels onto existing demo text: levels 1-2 use `Basic`, levels 3-4 use `Simple`, and level 5 uses `Original`.
 - The five design slots were visually polished one at a time:
 - Slot 2 ink density: grey ink stays clipped inside circular controls.
 - Slot 3 thermometer/pilcrow: compact vertical bars ordered `5 4 3 2 1`, with level 5 as full editorial prose.
@@ -88,7 +88,7 @@ Phase 2 is complete for the static browser prototype.
 - Segment ids are stable by segment type, for example `p-001`, `caption-001`, and `blockquote-001`.
 - Eligible segments include direct article paragraphs, non-hidden blockquotes, and figure captions. The current page skips the email line, social-follow promo paragraph, hidden pullquote duplicate, and Flourish/error-message content.
 - Original HTML is stored in memory per segment so toggling back to `Original` restores clean published markup instead of accumulating nested spans or replacement markup.
-- Demo `Clearer` and `Simple` variants now cover the 11 main editorial paragraphs in the captured article.
+- Demo `Simple` and `Basic` variants now cover the 11 main editorial paragraphs in the captured article.
 - Images, embeds, email links, and social/newsletter utility text are preserved rather than rewritten.
 - Phase 3 still needs a real generation helper/pipeline so future articles can produce the same JSON shape without handcrafted variants.
 
@@ -108,7 +108,7 @@ Phase 3 has been renamed mentally from "Precompute Script" to "Precomputed Varia
 ## Codex Collaboration Notes
 
 - The user wants to learn agentic coding, so future sessions should explain material workflow decisions briefly.
-- Point out when a task would benefit from a `SKILL.md`, subagents, a clearer goal statement, or a different Codex workflow.
+- Point out when a task would benefit from a `SKILL.md`, subagents, a more precise goal statement, or a different Codex workflow.
 - This task is not yet a good subagent task because the repo is small and the first prototype is tightly coupled.
 - A future `SKILL.md` may be worthwhile once selectors, commands, and project conventions stabilise.
 - This `MEMORY.md` file should be treated as a "living" document and Codex should update it accordingly as the project progresses and as conversations shed light on new insights or plans of direction. Avoid updating all time; only update when necessary.
