@@ -18,6 +18,7 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - `phase1-prototype.html`: static FT article prototype that loads the Phase 1 widget assets.
 - `phase1-widget.css`: widget styling for the left-rail prototype and five visual design slots.
 - `phase1-widget.js`: widget injection, level switching, and demo text replacement logic.
+- `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`: first precomputed variant-data asset for the Londonophobia article.
 
 ## Important DOM Findings
 
@@ -56,7 +57,8 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 ## Suggested Next Work
 
 - Move to Phase 3: create precomputed variant JSON assets and make the browser load them.
-- First move the current hardcoded demo variants into `language_variants/<article-id>.json`; add OpenAI generation only after the JSON contract is stable.
+- Add a local/server-side helper that can extract article segments and write valid `language_variants/<article-id>.json` files.
+- Add OpenAI generation only after the JSON contract is stable.
 - Keep any local script as behind-the-scenes generation plumbing, not the user-facing demo.
 - Add the editorial strike-through/replacement animation after the switching model is stable.
 
@@ -88,14 +90,16 @@ Phase 2 is complete for the static browser prototype.
 - Original HTML is stored in memory per segment so toggling back to `Original` restores clean published markup instead of accumulating nested spans or replacement markup.
 - Demo `Clearer` and `Simple` variants now cover the 11 main editorial paragraphs in the captured article.
 - Images, embeds, email links, and social/newsletter utility text are preserved rather than rewritten.
-- Phase 3 still needs the real precompute pipeline and JSON asset format so future articles do not rely on hardcoded demo variants.
+- Phase 3 still needs a real generation helper/pipeline so future articles can produce the same JSON shape without handcrafted variants.
 
 ## Phase 3 Direction
 
 Phase 3 has been renamed mentally from "Precompute Script" to "Precomputed Variant Data" because the finished product should not be a CLI.
 
-- The immediate goal is to move hardcoded `demoVariants` out of `phase1-widget.js` and into JSON files under `language_variants/`.
-- The browser article page should fetch the JSON on load and keep the same widget behavior.
+- The first Phase 3 step is implemented: hardcoded `demoVariants` were moved out of `phase1-widget.js` and into JSON under `language_variants/`.
+- The browser article page now fetches the JSON on load and keeps the same widget behavior when the file is available.
+- If variant JSON cannot load, non-Original changes are skipped and the widget reports that variant data is unavailable.
+- Serve the prototype over HTTP, for example via static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
 - The first implementation should use existing handcrafted variants, not OpenAI, to stabilize the data contract.
 - After the JSON loading path works, add a local/server-side generator that can call OpenAI and write the same JSON shape.
 - Demo users should only see a hosted article page with the widget. They should not run scripts or know a generator exists.

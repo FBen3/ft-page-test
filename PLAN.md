@@ -175,12 +175,15 @@ Status: COMPLETED for the static prototype as of 2026-05-21.
 
 ### Phase 3: Precomputed Variant Data
 
+Status: IN PROGRESS as of 2026-06-03.
+
 Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON assets that make the browser prototype look like a real precomputed feature.
 
-- Create a `language_variants/` folder.
+- Created a `language_variants/` folder.
 - Define the JSON contract for one article's segment variants.
-- Move the current handcrafted `Clearer` and `Simple` variants out of `phase1-widget.js` into `language_variants/<article-id>.json`.
-- Update `phase1-widget.js` to load the JSON file and fall back safely if variants are unavailable.
+- Moved the current handcrafted `Clearer` and `Simple` variants out of `phase1-widget.js` into `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
+- Updated `phase1-widget.js` to load the JSON file and fall back safely if variants are unavailable.
+- The page should be served over HTTP, for example through static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
 - Keep a small local script or helper workflow for extracting/writing variant JSON, but treat it as behind-the-scenes generation plumbing, not the user-facing demo.
 - Add OpenAI generation only after the JSON shape and browser loading path are stable.
 - Call OpenAI only from a local/server-side generation script or backend environment, never browser code.
@@ -222,10 +225,9 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 
 Build Phase 3 as a data-contract step before adding OpenAI generation:
 
-- Create `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
-- Move the existing hardcoded variants into that JSON file.
-- Update the widget to fetch the JSON file on page load.
-- Keep the UI behavior unchanged after the data move.
+- Add a local/server-side helper that can extract segments and write the same JSON shape.
+- Add OpenAI generation after the helper can produce valid JSON deterministically.
+- Keep the UI behavior unchanged while improving the generation pipeline.
 
 This keeps the architecture aligned with the desired finished demo: a static article page that seamlessly loads precomputed language variants.
 

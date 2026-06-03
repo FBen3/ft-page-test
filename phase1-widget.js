@@ -3,6 +3,7 @@
   var RAIL_SELECTOR = ".share-nav__vertical";
   var PROGRESS_SELECTOR = "#article-progress";
   var SEGMENT_SELECTOR = ":scope > p, :scope > blockquote, :scope > figure figcaption";
+  var VARIANT_BASE_PATH = "./language_variants/";
 
   var DESIGN_SLOTS = [1, 2, 3, 4, 5];
   var ARTICLE_LEVELS = ["original", "clearer", "simple"];
@@ -18,37 +19,16 @@
   var DEFAULT_DESIGN = "1";
   var UPDATED_CLASS = "reading-level-target--updated";
   var UPDATE_FLASH_MS = 520;
-
-  var demoVariants = {
-    clearer: {
-      "p-001": "Does any other city on Earth irritate people this much? Does it provoke such heated comment from such different groups? Does it make left and right, Americans and Russians alike, grumble like scandalised neighbours peering over the garden fence?",
-      "p-002": "In rightwing circles, the charge against London is that it is chaotic and so multicultural that it no longer belongs to the west. The left, meanwhile, sees it as a capitalist free-for-all: not just unequal, but corrupt. Both sides treat these faults as recent. In other words, London was supposedly virtuous until a recent moral fall, or even a Fall.",
-      "p-003": "And this is where a knowledgeable local has to step in. We have been hated for <em>much</em> longer than that.",
-      "p-004": "Londonophobia is an old prejudice. Its core idea, that London is too lax in one way or another, hardly changes. The Russian propagandists attacking the city today belong to a long tradition. Their Tsarist predecessors also objected to Victorian London because it sheltered Europe's political dissidents. When Joseph Conrad brought that world to life in <em>The Secret Agent</em>, he may not even have known that Lenin was in London, nurturing the revolution.",
-      "p-005": "Even then, London had already been cursed for centuries. There is a long tension between Paris, refined and hierarchical, and London, commercial and freewheeling. The philosopher Jürgen Habermas, who died last month, contrasted the 17th-century <em>salons</em>, where discussion was brilliant but controlled, with the argumentative chaos of London coffee houses.",
-      "p-006": "That contrast keeps returning. In the 1990s, French officials worried that “Londonistan” was too soft on Islamic radicals. This repeated an old view abroad, and across much of England, that London is dangerously tolerant. Criticise that trait if you like. But do not pretend it appeared during JD Vance’s lifetime.",
-      "p-007": "The left also indulges in this recency bias. Consider the sweet idea that London “became” commercial only a few decades ago. In today’s typical state-of-London novel, a trillionaire called Dmitri torments an angelic servant on a zero-hours contract in his Holland Park mansion, while somehow never being there. This paint-by-numbers version is forgivable from US correspondents. Others need not take it seriously, or romanticise the past. If anything, the supposedly egalitarian London of the 1970s, when the panic was that Arabs were buying the city, is the exception in a much longer history of near-piratical capitalism. London was called the Great Wen about 200 years ago.",
-      "p-008": "Notice the common thread. Whether a critic of London is on the left, or a conservative rich enough to live anywhere and choosing a golf resort, the complaint is often the same: regulate it, regiment it, bring it into line. The anti-foreign instinct and the anti-commercial instinct often go together.",
-      "p-009": "Londonophobia is the best proof I know for the horseshoe theory of politics. Left and right end up hating the same thing: liberalism. Both movements, at their core, want control.",
-      "p-010": "For people who think in systems, the city must be offensive. London is loose not only about people, but also about buildings and streets. There is no rational street layout, let alone a grid, thank God, and no consistent architectural style. Places around the corner from each other can feel as if they belong to different centuries. I nominate Holloway Road into Highbury Fields as the sharpest tonal contrast in the city, though I will hear other suggestions.",
-      "p-011": "Francis Ford Coppola said that <em>Apocalypse Now</em> was so chaotic, expensive and painful to make that it stopped being just about Vietnam. The film <em>was</em> Vietnam. It embodied the madness of the war. By that logic, London is not merely a liberal city. It <em>is</em> liberalism. Its winding streets, architectural jumble and chalk-and-cheese neighbourhoods are what happens when individual choices accumulate over centuries. It could not have been designed from above by someone with one total idea. No wonder the schematically minded find it irritating. The result is, and always has been, a city with all the right enemies."
-    },
-    simple: {
-      "p-001": "Does any other city on Earth annoy people this much? Does any other place make so many different people so angry? London seems able to make people on the left and the right, and people in America and Russia, complain in the same loud way.",
-      "p-002": "On the right, people say London is disorderly and so multicultural that it no longer feels part of the west. On the left, people say it is a wild capitalist city that is not only unequal but also corrupt. Both sides talk as if these problems are new. They act as though London was morally fine until recently.",
-      "p-003": "But a local who knows the city's history has to interrupt here. People have disliked us for <em>much</em> longer than that.",
-      "p-004": "Fear and dislike of London are not new. The basic complaint stays the same: people think London is too loose and too tolerant. The Russian voices attacking it today are only the latest version of that habit. Even in Victorian times, Russian rulers disliked London because it gave shelter to political exiles from Europe. When Joseph Conrad described that world in <em>The Secret Agent</em>, he probably did not even know Lenin was in the city, preparing for revolution.",
-      "p-005": "Even then, people had complained about London for centuries. Paris has often stood for order and refinement; London for trade and freedom. The philosopher Jürgen Habermas, who died last month, compared the controlled debates of 17th-century <em>salons</em> with the noisy arguments of London coffee houses.",
-      "p-006": "The same contrast appears again and again. In the 1990s, some French officials called London “Londonistan” because they thought it was too soft on Islamic radicals. That was an old complaint: London is too tolerant. You can dislike that about us. But do not pretend it is new.",
-      "p-007": "The left does this too. It likes the idea that London only “became” commercial recently. In many modern London novels, a billionaire named Dmitri exploits a kind servant in a Holland Park mansion while barely appearing himself. That simple picture is understandable from outsiders, but others should know better. Nor should they romanticise the past. The supposedly fair London of the 1970s was unusual. The city has a much longer history of aggressive capitalism. People were calling it the Great Wen about 200 years ago.",
-      "p-008": "The same idea runs through all of this. A London critic may be leftwing, or a rich conservative living on a golf resort. But the demand is often the same: control the city and make it fit a plan. Hostility to foreigners and hostility to commerce often sit close together.",
-      "p-009": "Dislike of London is the best example I know of the horseshoe theory of politics. The far left and the far right can end up hating the same thing: liberalism. Both want more control.",
-      "p-010": "For people who like neat systems, London must be annoying. The city is loose not just with people but with streets and buildings. There is no simple grid, thank God, and no single architectural style. Two nearby places can feel centuries apart. My best example is the change from Holloway Road to Highbury Fields, though I will accept other nominations.",
-      "p-011": "Francis Ford Coppola said making <em>Apocalypse Now</em> became so chaotic and painful that the film was no longer just about Vietnam. The film <em>was</em> Vietnam. In the same way, London is not just a liberal city. It <em>is</em> liberalism. Its winding streets, mixed architecture and very different neighbourhoods are the result of many individual choices over centuries. No single planner with one big idea could have created it. That is why people who love tidy systems dislike it. London has always had the right enemies."
-    }
+  var variantData = {
+    articleId: "",
+    loaded: false,
+    path: "",
+    variants: {}
   };
 
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", function () {
+    init();
+  });
 
   function init() {
     var rail = document.querySelector(RAIL_SELECTOR);
@@ -66,14 +46,114 @@
       return;
     }
 
-    registerSegments(segments);
-
-    mountPrototypeControls(rail, buildWidgets(segments));
-    console.info("[reading-level] Phase 2 widget mounted.", {
-      segments: segments.length,
-      variantCoverage: variantCoverage(segments),
-      designs: DESIGN_SLOTS.slice()
+    loadVariantData(article).then(function (loadedVariantData) {
+      variantData = loadedVariantData;
+      registerSegments(segments);
+      mountPrototypeControls(rail, buildWidgets(segments));
+      console.info("[reading-level] Phase 3 widget mounted.", {
+        articleId: variantData.articleId,
+        segments: segments.length,
+        variantCoverage: variantCoverage(segments),
+        variantsLoaded: variantData.loaded,
+        variantPath: variantData.path,
+        designs: DESIGN_SLOTS.slice()
+      });
     });
+  }
+
+  function loadVariantData(article) {
+    var articleId = getArticleId(article);
+    var path = articleId ? VARIANT_BASE_PATH + articleId + ".json" : "";
+
+    if (!articleId || !window.fetch) {
+      console.warn("[reading-level] Variant data could not be loaded because no article id or fetch support was found.");
+      return Promise.resolve(emptyVariantData(articleId, path));
+    }
+
+    return window.fetch(path)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        return response.json();
+      })
+      .then(function (payload) {
+        return normalizeVariantData(payload, path);
+      })
+      .catch(function (error) {
+        console.warn("[reading-level] Variant data could not be loaded.", {
+          path: path,
+          error: error.message
+        });
+
+        return emptyVariantData(articleId, path);
+      });
+  }
+
+  function getArticleId(article) {
+    var appContext = document.getElementById("page-kit-app-context");
+    var appContextId = readJsonScriptContentId(appContext);
+    var pageUrl = document.documentElement.getAttribute("data-underlying-url") || "";
+    var canonical = document.querySelector("link[rel='canonical']");
+    var canonicalUrl = canonical ? canonical.href : "";
+
+    return appContextId || contentIdFromUrl(pageUrl) || contentIdFromUrl(canonicalUrl) || article.dataset.articleId || "";
+  }
+
+  function readJsonScriptContentId(script) {
+    if (!script) {
+      return "";
+    }
+
+    try {
+      return JSON.parse(script.textContent).contentId || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function contentIdFromUrl(url) {
+    var match = url.match(/\/content\/([^/?#]+)/);
+    return match ? match[1] : "";
+  }
+
+  function normalizeVariantData(payload, path) {
+    var variants = {};
+
+    ARTICLE_LEVELS.forEach(function (level) {
+      variants[level] = {};
+    });
+
+    (payload.segments || []).forEach(function (segment) {
+      if (!segment.id) {
+        return;
+      }
+
+      if (segment.clearerHtml) {
+        variants.clearer[segment.id] = segment.clearerHtml;
+      }
+
+      if (segment.simpleHtml) {
+        variants.simple[segment.id] = segment.simpleHtml;
+      }
+    });
+
+    return {
+      articleId: payload.articleId || "",
+      loaded: true,
+      path: path,
+      variants: variants
+    };
+  }
+
+  function emptyVariantData(articleId, path) {
+    return {
+      articleId: articleId || "",
+      loaded: false,
+      path: path || "",
+      variants: {}
+    };
   }
 
   function collectSegments(article) {
@@ -402,12 +482,14 @@
     var status = document.createElement("p");
     status.className = "reading-level-widget__status";
     status.setAttribute("aria-live", "polite");
-    status.textContent = "Article language remains at Original.";
+    status.textContent = variantData.loaded
+      ? "Article language remains at Original."
+      : "Variant data unavailable; article remains at Original.";
     return status;
   }
 
   function applyArticleLevel(articleLevel, complexityLevel, segments, widget) {
-    var nextHtml = demoVariants[articleLevel] || {};
+    var nextHtml = variantData.variants[articleLevel] || {};
     var prototype = widget.closest(".reading-level-prototype");
     var activeArticleLevel = prototype ? prototype.dataset.articleLevel : DEFAULT_ARTICLE_LEVEL;
     var activeComplexity = prototype ? prototype.dataset.complexityLevel : String(DEFAULT_COMPLEXITY_LEVEL);
@@ -415,6 +497,19 @@
     var missingCount = 0;
 
     if (activeArticleLevel === articleLevel && activeComplexity === String(complexityLevel)) {
+      return;
+    }
+
+    if (articleLevel !== DEFAULT_ARTICLE_LEVEL && !variantData.loaded) {
+      if (prototype) {
+        syncStatuses(prototype, articleLevel, complexityLevel, 0);
+      }
+
+      console.warn("[reading-level] Level change skipped because variant data is unavailable.", {
+        articleLevel: articleLevel,
+        complexityLevel: complexityLevel,
+        variantPath: variantData.path
+      });
       return;
     }
 
@@ -474,6 +569,11 @@
 
   function syncStatuses(root, articleLevel, complexityLevel, changedCount) {
     root.querySelectorAll(".reading-level-widget__status").forEach(function (status) {
+      if (articleLevel !== DEFAULT_ARTICLE_LEVEL && !variantData.loaded) {
+        status.textContent = "Variant data unavailable; article remains at Original.";
+        return;
+      }
+
       if (articleLevel === DEFAULT_ARTICLE_LEVEL) {
         status.textContent = "Article language restored to Original.";
         return;
@@ -484,7 +584,7 @@
         labelForComplexity(complexityLevel) +
         " (" +
         labelForArticleLevel(articleLevel) +
-        " demo text, " +
+        " precomputed text, " +
         changedCount +
         " segments updated).";
     });
@@ -538,7 +638,7 @@
 
   function variantCoverage(segments) {
     return ARTICLE_LEVELS.reduce(function (coverage, level) {
-      var variants = demoVariants[level] || {};
+      var variants = variantData.variants[level] || {};
 
       coverage[level] = segments.filter(function (segment) {
         return Boolean(variants[segment.id]);
