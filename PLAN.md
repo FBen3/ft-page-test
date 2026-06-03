@@ -48,9 +48,20 @@ Recommended hackathon UI:
 Use a two-layer approach:
 
 - Front-end layer: reads precomputed language variants, renders the widget, swaps article segments, and plays animation.
-- Precompute layer: extracts article text, calls an LLM, validates output, and writes a JSON asset that the front-end can load.
+- Variant-data layer: stores already-generated article rewrites as JSON assets that the front end can load instantly.
+- Precompute/generation layer: extracts article text, calls an LLM, validates output, and writes those JSON assets before the reader sees the page.
 
 Do not put an OpenAI API key in browser code. The API belongs in a local/server-side precompute script or backend job.
+
+For the hackathon demo, the user-facing product should not feel like a CLI or tool. The most practical target is a static hosted demo:
+
+- A small landing page with links to 2 to 4 selected article pages.
+- Each article page looks like an FT article and includes the reading-level widget.
+- Each article has a precomputed `language_variants/<article-id>.json` file.
+- The browser loads those JSON variants and swaps text instantly when the widget is clicked.
+- The OpenAI/script portion is demo plumbing that runs before deployment, not something demo users see.
+
+The user has access to internal AWS accounts, so a simple static site on internal AWS is a plausible deployment target. Prefer static hosting such as S3 plus CloudFront, or an equivalent internal static hosting option, before reaching for EC2/load balancers. EC2 is only necessary if internal constraints require a running server.
 
 Suggested precomputed asset shape:
 
@@ -162,13 +173,18 @@ Status: COMPLETED for the static prototype as of 2026-05-21.
 - Expands handcrafted `Clearer` and `Simple` demo variants to the 11 main editorial paragraphs in the captured article.
 - Keeps real generated segment assets as Phase 3 work.
 
-### Phase 3: Precompute Script
+### Phase 3: Precomputed Variant Data
 
-- Turn `main.py` into a CLI with commands such as `extract`, `generate`, and `validate`.
-- Parse `example_page.html` with an HTML parser.
-- Produce `language_variants/<article-id>.json`.
-- Call OpenAI only from the CLI or backend environment.
-- Load `OPENAI_API_KEY` from the environment.
+Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON assets that make the browser prototype look like a real precomputed feature.
+
+- Create a `language_variants/` folder.
+- Define the JSON contract for one article's segment variants.
+- Move the current handcrafted `Clearer` and `Simple` variants out of `phase1-widget.js` into `language_variants/<article-id>.json`.
+- Update `phase1-widget.js` to load the JSON file and fall back safely if variants are unavailable.
+- Keep a small local script or helper workflow for extracting/writing variant JSON, but treat it as behind-the-scenes generation plumbing, not the user-facing demo.
+- Add OpenAI generation only after the JSON shape and browser loading path are stable.
+- Call OpenAI only from a local/server-side generation script or backend environment, never browser code.
+- Load `OPENAI_API_KEY` from the environment when generation is added.
 - Cache generated JSON locally so hackathon demos do not depend on live API calls.
 
 ### Phase 4: Animation Engine
@@ -204,13 +220,14 @@ Status: COMPLETED for the static prototype as of 2026-05-21.
 
 ## Recommended Next Step
 
-Build Phase 1 directly against the captured FT page:
+Build Phase 3 as a data-contract step before adding OpenAI generation:
 
-- Add a left-rail widget below `.share-nav__vertical`.
-- Use handcrafted variants for the first few paragraphs.
-- Implement basic switching and one clean editorial animation.
+- Create `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
+- Move the existing hardcoded variants into that JSON file.
+- Update the widget to fetch the JSON file on page load.
+- Keep the UI behavior unchanged after the data move.
 
-This gets a visual demo quickly. After that, add the OpenAI-backed precompute pipeline.
+This keeps the architecture aligned with the desired finished demo: a static article page that seamlessly loads precomputed language variants.
 
 ## Good To Do Later
 

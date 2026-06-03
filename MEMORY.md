@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-05-21
+Last updated: 2026-06-03
 
 ## Project Purpose
 
@@ -35,6 +35,9 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - Treat editorial trust as the main product risk.
 - Segment-level replacement is preferred over whole-article replacement.
 - For the first prototype, simplify article paragraphs and leave embeds/images intact.
+- The hackathon demo should feel like a seamless FT website feature, not a CLI/tool demo.
+- Preferred finished demo shape: a static hosted landing page linking to 2 to 4 selected FT-style article pages, each with the widget and precomputed variants.
+- The user has access to internal AWS accounts, so internal static hosting is a plausible sharing path for Slack. Prefer static hosting before EC2/load balancers unless internal constraints require a server.
 
 ## OpenAI Planning Notes
 
@@ -52,8 +55,9 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 
 ## Suggested Next Work
 
-- Move to Phase 3: turn `main.py` into a precompute CLI that extracts article segments and generates `language_variants/<article-id>.json`.
-- Keep the browser prototype reading precomputed segment variants; do not call OpenAI from browser code.
+- Move to Phase 3: create precomputed variant JSON assets and make the browser load them.
+- First move the current hardcoded demo variants into `language_variants/<article-id>.json`; add OpenAI generation only after the JSON contract is stable.
+- Keep any local script as behind-the-scenes generation plumbing, not the user-facing demo.
 - Add the editorial strike-through/replacement animation after the switching model is stable.
 
 ## Phase 1 Status
@@ -85,6 +89,17 @@ Phase 2 is complete for the static browser prototype.
 - Demo `Clearer` and `Simple` variants now cover the 11 main editorial paragraphs in the captured article.
 - Images, embeds, email links, and social/newsletter utility text are preserved rather than rewritten.
 - Phase 3 still needs the real precompute pipeline and JSON asset format so future articles do not rely on hardcoded demo variants.
+
+## Phase 3 Direction
+
+Phase 3 has been renamed mentally from "Precompute Script" to "Precomputed Variant Data" because the finished product should not be a CLI.
+
+- The immediate goal is to move hardcoded `demoVariants` out of `phase1-widget.js` and into JSON files under `language_variants/`.
+- The browser article page should fetch the JSON on load and keep the same widget behavior.
+- The first implementation should use existing handcrafted variants, not OpenAI, to stabilize the data contract.
+- After the JSON loading path works, add a local/server-side generator that can call OpenAI and write the same JSON shape.
+- Demo users should only see a hosted article page with the widget. They should not run scripts or know a generator exists.
+- Recommended final hackathon demo: static website with a small landing page plus 2 to 4 selected article pages, shareable through internal Slack.
 
 ## Codex Collaboration Notes
 
