@@ -6,7 +6,7 @@ Last updated: 2026-06-03
 
 This repo is being used for an FT hackathon prototype and as a learning project for agentic coding with Codex.
 
-The product goal is a desktop FT article-page widget that lets readers switch article language complexity between `Original`, `Simple`, and `Basic`. The feature should reduce comprehension barriers for younger or less expert readers while preserving FT meaning, tone, and style.
+The product goal is a desktop FT article-page widget that lets readers switch article language complexity across five levels. The feature should reduce comprehension barriers for younger or less expert readers while preserving FT meaning, tone, and style.
 
 ## Current Files
 
@@ -29,8 +29,10 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 
 ## Product Decisions So Far
 
-- Use user-facing labels `Original`, `Simple`, and `Basic` instead of `Hard`, `Medium`, and `Easy`.
-- Keep `Original` as the default.
+- Use user-facing labels that avoid `Hard`, `Medium`, and `Easy`, because those can feel patronising.
+- Canonical five-level model: `1 Essential`, `2 Basic`, `3 Plain`, `4 Simple`, `5 Original`.
+- Keep level 5 / `Original` as the default.
+- The original classic widget remains a compact three-button design: `Original` maps to level 5, `Simple` maps to level 3, and `Basic` maps to level 1.
 - Alternate article versions should be precomputed so clicks feel instant.
 - Do not call OpenAI from browser code.
 - Treat editorial trust as the main product risk.
@@ -56,8 +58,8 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 
 ## Suggested Next Work
 
-- Move to Phase 3: create precomputed variant JSON assets and make the browser load them.
-- Add a local/server-side helper that can extract article segments and write valid `language_variants/<article-id>.json` files.
+- Continue Phase 3: keep precomputed five-level variant JSON assets as the default data contract.
+- Add a local/server-side helper that can extract article segments and write valid `language_variants/<article-id>.json` files using fields like `level1Html` through `level4Html`.
 - Add OpenAI generation only after the JSON contract is stable.
 - Keep any local script as behind-the-scenes generation plumbing, not the user-facing demo.
 - Add the editorial strike-through/replacement animation after the switching model is stable.
@@ -71,8 +73,9 @@ Phase 1 is complete as a static DOM prototype.
 - `phase1-widget.js` mounts the widget into `.share-nav__vertical`; Phase 1 started with the first four paragraphs, and Phase 2 now expands this into segment-based article switching.
 - The current transition is intentionally minimal: instant replacement plus a brief highlight flash, not the final editorial animation.
 - The widget is now mounted directly after `#article-progress` and wrapped with 1-5 design-slot controls for internal visual testing.
-- Design slot 1 is the original three-level `Original`/`Simple`/`Basic` widget. Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
-- Until the project has real five-level generated text, slots 2-5 bridge their levels onto existing demo text: levels 1-2 use `Basic`, levels 3-4 use `Simple`, and level 5 uses `Original`.
+- Design slot 1 is the original compact `Original`/`Simple`/`Basic` widget. It now maps onto the canonical five-level model using levels 5, 3, and 1.
+- Design slots 2-5 are five-level visual controls adapted from `ft_reading_level_widgets.html`: ink density, pilcrow fill bar, concentric rings, and type weight sampler.
+- Until the project has real distinct five-level generated text, the JSON data duplicates available handcrafted variants: levels 1-2 use the old `Basic` text, levels 3-4 use the old `Simple` text, and level 5 uses the original DOM.
 - The five design slots were visually polished one at a time:
 - Slot 2 ink density: grey ink stays clipped inside circular controls.
 - Slot 3 thermometer/pilcrow: compact vertical bars ordered `5 4 3 2 1`, with level 5 as full editorial prose.
@@ -88,7 +91,7 @@ Phase 2 is complete for the static browser prototype.
 - Segment ids are stable by segment type, for example `p-001`, `caption-001`, and `blockquote-001`.
 - Eligible segments include direct article paragraphs, non-hidden blockquotes, and figure captions. The current page skips the email line, social-follow promo paragraph, hidden pullquote duplicate, and Flourish/error-message content.
 - Original HTML is stored in memory per segment so toggling back to `Original` restores clean published markup instead of accumulating nested spans or replacement markup.
-- Demo `Simple` and `Basic` variants now cover the 11 main editorial paragraphs in the captured article.
+- Demo variants now cover the 11 main editorial paragraphs in the captured article.
 - Images, embeds, email links, and social/newsletter utility text are preserved rather than rewritten.
 - Phase 3 still needs a real generation helper/pipeline so future articles can produce the same JSON shape without handcrafted variants.
 
@@ -98,6 +101,9 @@ Phase 3 has been renamed mentally from "Precompute Script" to "Precomputed Varia
 
 - The first Phase 3 step is implemented: hardcoded `demoVariants` were moved out of `phase1-widget.js` and into JSON under `language_variants/`.
 - The browser article page now fetches the JSON on load and keeps the same widget behavior when the file is available.
+- Five complexity levels are now the default browser/data model. The JSON uses `levels: [1, 2, 3, 4, 5]`, with per-segment `level1Html` through `level4Html`; level 5 restores original published HTML already captured from the DOM.
+- The classic three-button widget is no longer the source of truth. It is only a compact UI variant mapped to levels 5, 3, and 1.
+- Current handcrafted data temporarily duplicates variants across adjacent levels until an OpenAI generation helper can produce distinct five-level text.
 - If variant JSON cannot load, non-Original changes are skipped and the widget reports that variant data is unavailable.
 - Serve the prototype over HTTP, for example via static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
 - The first implementation should use existing handcrafted variants, not OpenAI, to stabilize the data contract.

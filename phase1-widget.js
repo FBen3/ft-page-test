@@ -6,15 +6,18 @@
   var VARIANT_BASE_PATH = "./language_variants/";
 
   var DESIGN_SLOTS = [1, 2, 3, 4, 5];
-  var ARTICLE_LEVELS = ["original", "simple", "basic"];
-  var FIVE_LEVELS = [
-    { level: 1, label: "Essential", note: "Core facts only", articleLevel: "basic" },
-    { level: 2, label: "Basic", note: "Plain language", articleLevel: "basic" },
-    { level: 3, label: "Plain", note: "Everyday vocabulary", articleLevel: "simple" },
-    { level: 4, label: "Simple", note: "Shorter sentences", articleLevel: "simple" },
-    { level: 5, label: "Original", note: "Full editorial prose", articleLevel: "original" }
+  var COMPLEXITY_LEVELS = [
+    { level: 1, label: "Essential", note: "Core facts only" },
+    { level: 2, label: "Basic", note: "Plain language" },
+    { level: 3, label: "Plain", note: "Everyday vocabulary" },
+    { level: 4, label: "Simple", note: "Shorter sentences" },
+    { level: 5, label: "Original", note: "Full editorial prose" }
   ];
-  var DEFAULT_ARTICLE_LEVEL = "original";
+  var CLASSIC_LEVELS = [
+    { level: 5, label: "Original" },
+    { level: 3, label: "Simple" },
+    { level: 1, label: "Basic" }
+  ];
   var DEFAULT_COMPLEXITY_LEVEL = 5;
   var DEFAULT_DESIGN = "1";
   var UPDATED_CLASS = "reading-level-target--updated";
@@ -121,8 +124,8 @@
   function normalizeVariantData(payload, path) {
     var variants = {};
 
-    ARTICLE_LEVELS.forEach(function (level) {
-      variants[level] = {};
+    COMPLEXITY_LEVELS.forEach(function (item) {
+      variants[item.level] = {};
     });
 
     (payload.segments || []).forEach(function (segment) {
@@ -130,13 +133,13 @@
         return;
       }
 
-      if (segment.simpleHtml) {
-        variants.simple[segment.id] = segment.simpleHtml;
-      }
+      COMPLEXITY_LEVELS.forEach(function (item) {
+        var key = "level" + item.level + "Html";
 
-      if (segment.basicHtml) {
-        variants.basic[segment.id] = segment.basicHtml;
-      }
+        if (segment[key]) {
+          variants[item.level][segment.id] = segment[key];
+        }
+      });
     });
 
     return {
@@ -235,7 +238,6 @@
 
     prototype.className = "reading-level-prototype";
     prototype.dataset.design = DEFAULT_DESIGN;
-    prototype.dataset.articleLevel = DEFAULT_ARTICLE_LEVEL;
     prototype.dataset.complexityLevel = String(DEFAULT_COMPLEXITY_LEVEL);
     prototype.appendChild(buildDesignSlots(prototype));
     prototype.appendChild(widgets);
@@ -305,15 +307,15 @@
     var body = document.createElement("div");
     body.className = "reading-level-widget__body";
 
-    ARTICLE_LEVELS.forEach(function (level) {
+    CLASSIC_LEVELS.forEach(function (item) {
       var button = document.createElement("button");
       button.type = "button";
       button.className = "reading-level-widget__button reading-level-control";
-      button.dataset.articleLevel = level;
-      button.setAttribute("aria-pressed", level === DEFAULT_ARTICLE_LEVEL ? "true" : "false");
-      button.textContent = labelForArticleLevel(level);
+      button.dataset.level = String(item.level);
+      button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
+      button.textContent = item.label;
       button.addEventListener("click", function () {
-        applyArticleLevel(level, complexityForArticleLevel(level), segments, widget);
+        applyComplexityLevel(item.level, segments, widget);
       });
       body.appendChild(button);
     });
@@ -331,14 +333,13 @@
     body.className = "reading-level-widget__body";
     controls.className = "reading-level-ink-dials";
 
-    FIVE_LEVELS.forEach(function (item) {
+    COMPLEXITY_LEVELS.forEach(function (item) {
       var button = document.createElement("button");
       var size = 7 + item.level * 4;
 
       button.type = "button";
       button.className = "reading-level-ink-dial reading-level-control";
       button.dataset.level = String(item.level);
-      button.dataset.articleLevel = item.articleLevel;
       button.setAttribute("aria-label", item.label);
       button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
       button.title = item.label;
@@ -349,7 +350,7 @@
         size +
         'px"></span>';
       button.addEventListener("click", function () {
-        applyArticleLevel(item.articleLevel, item.level, segments, widget);
+        applyComplexityLevel(item.level, segments, widget);
       });
       controls.appendChild(button);
     });
@@ -371,14 +372,13 @@
     row.className = "reading-level-pilcrow";
     bars.className = "reading-level-pilcrow__bars";
 
-    FIVE_LEVELS.slice().reverse().forEach(function (item) {
+    COMPLEXITY_LEVELS.slice().reverse().forEach(function (item) {
       var button = document.createElement("button");
       var fillHeight = 15 + (item.level - 1) * 18;
 
       button.type = "button";
       button.className = "reading-level-pilcrow__bar reading-level-control";
       button.dataset.level = String(item.level);
-      button.dataset.articleLevel = item.articleLevel;
       button.setAttribute("aria-label", item.label);
       button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
       button.title = item.label;
@@ -389,7 +389,7 @@
         item.level +
         "</span>";
       button.addEventListener("click", function () {
-        applyArticleLevel(item.articleLevel, item.level, segments, widget);
+        applyComplexityLevel(item.level, segments, widget);
       });
       bars.appendChild(button);
     });
@@ -410,21 +410,20 @@
     body.className = "reading-level-widget__body";
     rings.className = "reading-level-rings";
 
-    FIVE_LEVELS.slice().reverse().forEach(function (item, index) {
+    COMPLEXITY_LEVELS.slice().reverse().forEach(function (item, index) {
       var button = document.createElement("button");
       var diameter = 84 - index * 14;
 
       button.type = "button";
       button.className = "reading-level-rings__ring reading-level-control";
       button.dataset.level = String(item.level);
-      button.dataset.articleLevel = item.articleLevel;
       button.style.width = diameter + "px";
       button.style.height = diameter + "px";
       button.setAttribute("aria-label", item.label);
       button.setAttribute("aria-pressed", item.level === DEFAULT_COMPLEXITY_LEVEL ? "true" : "false");
       button.title = item.label;
       button.addEventListener("click", function () {
-        applyArticleLevel(item.articleLevel, item.level, segments, widget);
+        applyComplexityLevel(item.level, segments, widget);
       });
       rings.appendChild(button);
     });
@@ -444,13 +443,12 @@
     body.className = "reading-level-widget__body";
     controls.className = "reading-level-type-sampler";
 
-    FIVE_LEVELS.forEach(function (item) {
+    COMPLEXITY_LEVELS.forEach(function (item) {
       var button = document.createElement("button");
 
       button.type = "button";
       button.className = "reading-level-type-sampler__glyph reading-level-control";
       button.dataset.level = String(item.level);
-      button.dataset.articleLevel = item.articleLevel;
       button.style.fontSize = 10 + item.level * 4 + "px";
       button.style.fontWeight = 250 + item.level * 120;
       button.setAttribute("aria-label", item.label);
@@ -458,7 +456,7 @@
       button.title = item.label;
       button.textContent = "A";
       button.addEventListener("click", function () {
-        applyArticleLevel(item.articleLevel, item.level, segments, widget);
+        applyComplexityLevel(item.level, segments, widget);
       });
       controls.appendChild(button);
     });
@@ -488,25 +486,23 @@
     return status;
   }
 
-  function applyArticleLevel(articleLevel, complexityLevel, segments, widget) {
-    var nextHtml = variantData.variants[articleLevel] || {};
+  function applyComplexityLevel(complexityLevel, segments, widget) {
+    var nextHtml = variantData.variants[complexityLevel] || {};
     var prototype = widget.closest(".reading-level-prototype");
-    var activeArticleLevel = prototype ? prototype.dataset.articleLevel : DEFAULT_ARTICLE_LEVEL;
     var activeComplexity = prototype ? prototype.dataset.complexityLevel : String(DEFAULT_COMPLEXITY_LEVEL);
     var changedCount = 0;
     var missingCount = 0;
 
-    if (activeArticleLevel === articleLevel && activeComplexity === String(complexityLevel)) {
+    if (activeComplexity === String(complexityLevel)) {
       return;
     }
 
-    if (articleLevel !== DEFAULT_ARTICLE_LEVEL && !variantData.loaded) {
+    if (complexityLevel !== DEFAULT_COMPLEXITY_LEVEL && !variantData.loaded) {
       if (prototype) {
-        syncStatuses(prototype, articleLevel, complexityLevel, 0);
+        syncStatuses(prototype, complexityLevel, 0);
       }
 
       console.warn("[reading-level] Level change skipped because variant data is unavailable.", {
-        articleLevel: articleLevel,
         complexityLevel: complexityLevel,
         variantPath: variantData.path
       });
@@ -514,10 +510,10 @@
     }
 
     segments.forEach(function (segment) {
-      var html = articleLevel === DEFAULT_ARTICLE_LEVEL ? segment.originalHtml : nextHtml[segment.id];
+      var html = complexityLevel === DEFAULT_COMPLEXITY_LEVEL ? segment.originalHtml : nextHtml[segment.id];
 
       if (!html) {
-        missingCount += articleLevel === DEFAULT_ARTICLE_LEVEL ? 0 : 1;
+        missingCount += complexityLevel === DEFAULT_COMPLEXITY_LEVEL ? 0 : 1;
         return;
       }
 
@@ -536,28 +532,22 @@
     });
 
     if (prototype) {
-      prototype.dataset.articleLevel = articleLevel;
       prototype.dataset.complexityLevel = String(complexityLevel);
-      syncControls(prototype, articleLevel, complexityLevel);
+      syncControls(prototype, complexityLevel);
       syncLevelNotes(prototype, complexityLevel);
-      syncStatuses(prototype, articleLevel, complexityLevel, changedCount);
+      syncStatuses(prototype, complexityLevel, changedCount);
     }
 
     console.info("[reading-level] Level changed.", {
-      articleLevel: articleLevel,
       complexityLevel: complexityLevel,
       changedSegments: changedCount,
       missingVariantSegments: missingCount
     });
   }
 
-  function syncControls(root, articleLevel, complexityLevel) {
+  function syncControls(root, complexityLevel) {
     root.querySelectorAll(".reading-level-control").forEach(function (button) {
-      var isPressed = button.dataset.level
-        ? button.dataset.level === String(complexityLevel)
-        : button.dataset.articleLevel === articleLevel;
-
-      button.setAttribute("aria-pressed", String(isPressed));
+      button.setAttribute("aria-pressed", String(button.dataset.level === String(complexityLevel)));
     });
   }
 
@@ -567,14 +557,14 @@
     });
   }
 
-  function syncStatuses(root, articleLevel, complexityLevel, changedCount) {
+  function syncStatuses(root, complexityLevel, changedCount) {
     root.querySelectorAll(".reading-level-widget__status").forEach(function (status) {
-      if (articleLevel !== DEFAULT_ARTICLE_LEVEL && !variantData.loaded) {
+      if (complexityLevel !== DEFAULT_COMPLEXITY_LEVEL && !variantData.loaded) {
         status.textContent = "Variant data unavailable; article remains at Original.";
         return;
       }
 
-      if (articleLevel === DEFAULT_ARTICLE_LEVEL) {
+      if (complexityLevel === DEFAULT_COMPLEXITY_LEVEL) {
         status.textContent = "Article language restored to Original.";
         return;
       }
@@ -583,8 +573,6 @@
         "Reading level changed to " +
         labelForComplexity(complexityLevel) +
         " (" +
-        labelForArticleLevel(articleLevel) +
-        " precomputed text, " +
         changedCount +
         " segments updated).";
     });
@@ -596,32 +584,8 @@
     });
   }
 
-  function complexityForArticleLevel(articleLevel) {
-    if (articleLevel === "basic") {
-      return 1;
-    }
-
-    if (articleLevel === "simple") {
-      return 3;
-    }
-
-    return 5;
-  }
-
-  function labelForArticleLevel(level) {
-    if (level === "simple") {
-      return "Simple";
-    }
-
-    if (level === "basic") {
-      return "Basic";
-    }
-
-    return "Original";
-  }
-
   function labelForComplexity(level) {
-    var match = FIVE_LEVELS.filter(function (item) {
+    var match = COMPLEXITY_LEVELS.filter(function (item) {
       return item.level === Number(level);
     })[0];
 
@@ -629,7 +593,7 @@
   }
 
   function noteForComplexity(level) {
-    var match = FIVE_LEVELS.filter(function (item) {
+    var match = COMPLEXITY_LEVELS.filter(function (item) {
       return item.level === Number(level);
     })[0];
 
@@ -637,12 +601,15 @@
   }
 
   function variantCoverage(segments) {
-    return ARTICLE_LEVELS.reduce(function (coverage, level) {
-      var variants = variantData.variants[level] || {};
+    return COMPLEXITY_LEVELS.reduce(function (coverage, item) {
+      var variants = variantData.variants[item.level] || {};
 
-      coverage[level] = segments.filter(function (segment) {
-        return Boolean(variants[segment.id]);
-      }).length;
+      coverage[item.level] =
+        item.level === DEFAULT_COMPLEXITY_LEVEL
+          ? segments.length
+          : segments.filter(function (segment) {
+              return Boolean(variants[segment.id]);
+            }).length;
 
       return coverage;
     }, {});

@@ -2,11 +2,15 @@
 
 ## Goal
 
-Build a desktop-only FT article-page widget that lets readers switch between three language complexity levels:
+Build a desktop-only FT article-page widget that lets readers switch between five language complexity levels:
 
-- `Original`: the published article, default state.
-- `Simple`: slightly simpler language while preserving the author's meaning, tone, argument, structure, and style.
-- `Basic`: substantially simpler language for a high-school-level reader, still preserving meaning, tone, and key FT style.
+- `1 Essential`: core facts only.
+- `2 Basic`: plain language.
+- `3 Plain`: everyday vocabulary.
+- `4 Simple`: shorter sentences.
+- `5 Original`: the published article, default state.
+
+The original classic widget remains as a compact three-button design for comparison. It maps `Original` to level 5, `Simple` to level 3, and `Basic` to level 1.
 
 The reader interaction should feel instant. Alternate versions should be precomputed before the reader clicks, and switching levels 
 should trigger an editorial-feeling text transformation animation rather than a plain text swap.
@@ -22,8 +26,16 @@ should trigger an editorial-feeling text transformation animation rather than a 
 
 ## Product Framing
 
-Avoid labels like "Hard", "Medium", and "Easy" in the UI. They are clear internally, but user-facing copy can feel patronising. 
-A better first pass:
+Avoid labels like "Hard", "Medium", and "Easy" in the UI. They are clear internally, but user-facing copy can feel patronising.
+Canonical five-level labels:
+
+- `Essential`
+- `Basic`
+- `Plain`
+- `Simple`
+- `Original`
+
+Classic three-button widget labels:
 
 - `Original`
 - `Simple`
@@ -69,14 +81,16 @@ Suggested precomputed asset shape:
 {
   "articleId": "ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6",
   "generatedAt": "2026-05-10T00:00:00Z",
-  "levels": ["original", "simple", "basic"],
+  "levels": [1, 2, 3, 4, 5],
   "segments": [
     {
       "id": "p-001",
       "selector": "#article-body > p:nth-of-type(1)",
       "originalHtml": "Does another city on Earth...",
-      "simpleHtml": "Does any other city on Earth...",
-      "basicHtml": "Is there another city that annoys people this much?",
+      "level1Html": "Is there another city that annoys people this much?",
+      "level2Html": "Is there another city that annoys people this much?",
+      "level3Html": "Does any other city on Earth...",
+      "level4Html": "Does any other city on Earth...",
       "lockedTerms": ["London", "American", "Russian"],
       "warnings": []
     }
@@ -84,8 +98,9 @@ Suggested precomputed asset shape:
 }
 ```
 
-Segment-level storage is better than storing one whole rewritten article because it lets the front end preserve figures, captions, i
-pull quotes, links, emphasis tags, and article layout.
+Segment-level storage is better than storing one whole rewritten article because it lets the front end preserve figures, captions, pull quotes, links, emphasis tags, and article layout.
+
+Level 5 is the published article and is restored from the original DOM, so `level5Html` is not required in the current browser contract. The current handcrafted demo duplicates levels 1 and 2, and levels 3 and 4, until a generator can produce distinct five-level rewrites.
 
 ## OpenAI API Plan
 
@@ -154,12 +169,12 @@ Status: COMPLETED as of 2026-05-20.
 - Added static mock variants for the first four article paragraphs, later expanded in Phase 2.
 - Implemented instant switching with a brief highlight flash and `console.info` interaction logs.
 - Added five internal visual design slots:
-- Slot 1: classic three-level `Original` / `Simple` / `Basic`.
+- Slot 1: classic three-button `Original` / `Simple` / `Basic`.
 - Slot 2: ink density circular controls.
 - Slot 3: compact thermometer bars ordered `5 4 3 2 1`.
 - Slot 4: reach rings with solid active fill.
 - Slot 5: vertical type sampler ordered `1 2 3 4 5`.
-- Current bridge for slots 2-5: levels 1-2 map to `Basic`, levels 3-4 map to `Simple`, and level 5 maps to `Original`.
+- Canonical model: all designs now emit complexity levels 1 to 5. Slot 1 maps its compact buttons to levels 5, 3, and 1.
 
 ### Phase 2: Full Article Segment Handling
 
@@ -170,7 +185,7 @@ Status: COMPLETED for the static prototype as of 2026-05-21.
 - Preserves non-text and utility elements such as images, Flourish embeds, email links, hidden pullquote duplicates, and social/newsletter promo text.
 - Stores original segment HTML in memory on page load so `Original` can always restore the published version.
 - Ensures repeated toggling between levels does not accumulate nested spans or replacement markup.
-- Expands handcrafted `Simple` and `Basic` demo variants to the 11 main editorial paragraphs in the captured article.
+- Expands handcrafted demo variants to the 11 main editorial paragraphs in the captured article.
 - Keeps real generated segment assets as Phase 3 work.
 
 ### Phase 3: Precomputed Variant Data
@@ -181,7 +196,10 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 
 - Created a `language_variants/` folder.
 - Define the JSON contract for one article's segment variants.
-- Moved the current handcrafted `Simple` and `Basic` variants out of `phase1-widget.js` into `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
+- Moved the current handcrafted variants out of `phase1-widget.js` into `language_variants/ba3b3ed8-4f6f-486e-aa8c-fbec8a87ffd6.json`.
+- Updated the browser data model so five complexity levels are the default. The JSON now uses numeric `levels: [1, 2, 3, 4, 5]` and per-segment fields such as `level1Html` through `level4Html`.
+- Level 5 uses the original published DOM instead of duplicated JSON.
+- Current temporary bridge: levels 1 and 2 share the old `Basic` text, and levels 3 and 4 share the old `Simple` text, until generated data can provide distinct variants.
 - Updated `phase1-widget.js` to load the JSON file and fall back safely if variants are unavailable.
 - The page should be served over HTTP, for example through static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
 - Keep a small local script or helper workflow for extracting/writing variant JSON, but treat it as behind-the-scenes generation plumbing, not the user-facing demo.
@@ -225,7 +243,7 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 
 Build Phase 3 as a data-contract step before adding OpenAI generation:
 
-- Add a local/server-side helper that can extract segments and write the same JSON shape.
+- Add a local/server-side helper that can extract segments and write the same five-level JSON shape.
 - Add OpenAI generation after the helper can produce valid JSON deterministically.
 - Keep the UI behavior unchanged while improving the generation pipeline.
 

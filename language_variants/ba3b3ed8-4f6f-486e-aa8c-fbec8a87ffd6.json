@@ -3,84 +3,112 @@
   "title": "The return of Londonophobia",
   "generatedAt": "2026-06-03T00:00:00Z",
   "source": "handcrafted-phase-3-demo",
-  "levels": ["original", "simple", "basic"],
+  "levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
   "segments": [
     {
       "id": "p-001",
       "kind": "p",
-      "simpleHtml": "Does any other city on Earth irritate people this much? Does it provoke such heated comment from such different groups? Does it make left and right, Americans and Russians alike, grumble like scandalised neighbours peering over the garden fence?",
-      "basicHtml": "Does any other city on Earth annoy people this much? Does any other place make so many different people so angry? London seems able to make people on the left and the right, and people in America and Russia, complain in the same loud way.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "Does any other city on Earth annoy people this much? Does any other place make so many different people so angry? London seems able to make people on the left and the right, and people in America and Russia, complain in the same loud way.",
+      "level2Html": "Does any other city on Earth annoy people this much? Does any other place make so many different people so angry? London seems able to make people on the left and the right, and people in America and Russia, complain in the same loud way.",
+      "level3Html": "Does any other city on Earth irritate people this much? Does it provoke such heated comment from such different groups? Does it make left and right, Americans and Russians alike, grumble like scandalised neighbours peering over the garden fence?",
+      "level4Html": "Does any other city on Earth irritate people this much? Does it provoke such heated comment from such different groups? Does it make left and right, Americans and Russians alike, grumble like scandalised neighbours peering over the garden fence?"
     },
     {
       "id": "p-002",
       "kind": "p",
-      "simpleHtml": "In rightwing circles, the charge against London is that it is chaotic and so multicultural that it no longer belongs to the west. The left, meanwhile, sees it as a capitalist free-for-all: not just unequal, but corrupt. Both sides treat these faults as recent. In other words, London was supposedly virtuous until a recent moral fall, or even a Fall.",
-      "basicHtml": "On the right, people say London is disorderly and so multicultural that it no longer feels part of the west. On the left, people say it is a wild capitalist city that is not only unequal but also corrupt. Both sides talk as if these problems are new. They act as though London was morally fine until recently.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "On the right, people say London is disorderly and so multicultural that it no longer feels part of the west. On the left, people say it is a wild capitalist city that is not only unequal but also corrupt. Both sides talk as if these problems are new. They act as though London was morally fine until recently.",
+      "level2Html": "On the right, people say London is disorderly and so multicultural that it no longer feels part of the west. On the left, people say it is a wild capitalist city that is not only unequal but also corrupt. Both sides talk as if these problems are new. They act as though London was morally fine until recently.",
+      "level3Html": "In rightwing circles, the charge against London is that it is chaotic and so multicultural that it no longer belongs to the west. The left, meanwhile, sees it as a capitalist free-for-all: not just unequal, but corrupt. Both sides treat these faults as recent. In other words, London was supposedly virtuous until a recent moral fall, or even a Fall.",
+      "level4Html": "In rightwing circles, the charge against London is that it is chaotic and so multicultural that it no longer belongs to the west. The left, meanwhile, sees it as a capitalist free-for-all: not just unequal, but corrupt. Both sides treat these faults as recent. In other words, London was supposedly virtuous until a recent moral fall, or even a Fall."
     },
     {
       "id": "p-003",
       "kind": "p",
-      "simpleHtml": "And this is where a knowledgeable local has to step in. We have been hated for <em>much</em> longer than that.",
-      "basicHtml": "But a local who knows the city's history has to interrupt here. People have disliked us for <em>much</em> longer than that.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "But a local who knows the city's history has to interrupt here. People have disliked us for <em>much</em> longer than that.",
+      "level2Html": "But a local who knows the city's history has to interrupt here. People have disliked us for <em>much</em> longer than that.",
+      "level3Html": "And this is where a knowledgeable local has to step in. We have been hated for <em>much</em> longer than that.",
+      "level4Html": "And this is where a knowledgeable local has to step in. We have been hated for <em>much</em> longer than that."
     },
     {
       "id": "p-004",
       "kind": "p",
-      "simpleHtml": "Londonophobia is an old prejudice. Its core idea, that London is too lax in one way or another, hardly changes. The Russian propagandists attacking the city today belong to a long tradition. Their Tsarist predecessors also objected to Victorian London because it sheltered Europe's political dissidents. When Joseph Conrad brought that world to life in <em>The Secret Agent</em>, he may not even have known that Lenin was in London, nurturing the revolution.",
-      "basicHtml": "Fear and dislike of London are not new. The basic complaint stays the same: people think London is too loose and too tolerant. The Russian voices attacking it today are only the latest version of that habit. Even in Victorian times, Russian rulers disliked London because it gave shelter to political exiles from Europe. When Joseph Conrad described that world in <em>The Secret Agent</em>, he probably did not even know Lenin was in the city, preparing for revolution.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "Fear and dislike of London are not new. The basic complaint stays the same: people think London is too loose and too tolerant. The Russian voices attacking it today are only the latest version of that habit. Even in Victorian times, Russian rulers disliked London because it gave shelter to political exiles from Europe. When Joseph Conrad described that world in <em>The Secret Agent</em>, he probably did not even know Lenin was in the city, preparing for revolution.",
+      "level2Html": "Fear and dislike of London are not new. The basic complaint stays the same: people think London is too loose and too tolerant. The Russian voices attacking it today are only the latest version of that habit. Even in Victorian times, Russian rulers disliked London because it gave shelter to political exiles from Europe. When Joseph Conrad described that world in <em>The Secret Agent</em>, he probably did not even know Lenin was in the city, preparing for revolution.",
+      "level3Html": "Londonophobia is an old prejudice. Its core idea, that London is too lax in one way or another, hardly changes. The Russian propagandists attacking the city today belong to a long tradition. Their Tsarist predecessors also objected to Victorian London because it sheltered Europe's political dissidents. When Joseph Conrad brought that world to life in <em>The Secret Agent</em>, he may not even have known that Lenin was in London, nurturing the revolution.",
+      "level4Html": "Londonophobia is an old prejudice. Its core idea, that London is too lax in one way or another, hardly changes. The Russian propagandists attacking the city today belong to a long tradition. Their Tsarist predecessors also objected to Victorian London because it sheltered Europe's political dissidents. When Joseph Conrad brought that world to life in <em>The Secret Agent</em>, he may not even have known that Lenin was in London, nurturing the revolution."
     },
     {
       "id": "p-005",
       "kind": "p",
-      "simpleHtml": "Even then, London had already been cursed for centuries. There is a long tension between Paris, refined and hierarchical, and London, commercial and freewheeling. The philosopher Jürgen Habermas, who died last month, contrasted the 17th-century <em>salons</em>, where discussion was brilliant but controlled, with the argumentative chaos of London coffee houses.",
-      "basicHtml": "Even then, people had complained about London for centuries. Paris has often stood for order and refinement; London for trade and freedom. The philosopher Jürgen Habermas, who died last month, compared the controlled debates of 17th-century <em>salons</em> with the noisy arguments of London coffee houses.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "Even then, people had complained about London for centuries. Paris has often stood for order and refinement; London for trade and freedom. The philosopher Jürgen Habermas, who died last month, compared the controlled debates of 17th-century <em>salons</em> with the noisy arguments of London coffee houses.",
+      "level2Html": "Even then, people had complained about London for centuries. Paris has often stood for order and refinement; London for trade and freedom. The philosopher Jürgen Habermas, who died last month, compared the controlled debates of 17th-century <em>salons</em> with the noisy arguments of London coffee houses.",
+      "level3Html": "Even then, London had already been cursed for centuries. There is a long tension between Paris, refined and hierarchical, and London, commercial and freewheeling. The philosopher Jürgen Habermas, who died last month, contrasted the 17th-century <em>salons</em>, where discussion was brilliant but controlled, with the argumentative chaos of London coffee houses.",
+      "level4Html": "Even then, London had already been cursed for centuries. There is a long tension between Paris, refined and hierarchical, and London, commercial and freewheeling. The philosopher Jürgen Habermas, who died last month, contrasted the 17th-century <em>salons</em>, where discussion was brilliant but controlled, with the argumentative chaos of London coffee houses."
     },
     {
       "id": "p-006",
       "kind": "p",
-      "simpleHtml": "That contrast keeps returning. In the 1990s, French officials worried that “Londonistan” was too soft on Islamic radicals. This repeated an old view abroad, and across much of England, that London is dangerously tolerant. Criticise that trait if you like. But do not pretend it appeared during JD Vance’s lifetime.",
-      "basicHtml": "The same contrast appears again and again. In the 1990s, some French officials called London “Londonistan” because they thought it was too soft on Islamic radicals. That was an old complaint: London is too tolerant. You can dislike that about us. But do not pretend it is new.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "The same contrast appears again and again. In the 1990s, some French officials called London “Londonistan” because they thought it was too soft on Islamic radicals. That was an old complaint: London is too tolerant. You can dislike that about us. But do not pretend it is new.",
+      "level2Html": "The same contrast appears again and again. In the 1990s, some French officials called London “Londonistan” because they thought it was too soft on Islamic radicals. That was an old complaint: London is too tolerant. You can dislike that about us. But do not pretend it is new.",
+      "level3Html": "That contrast keeps returning. In the 1990s, French officials worried that “Londonistan” was too soft on Islamic radicals. This repeated an old view abroad, and across much of England, that London is dangerously tolerant. Criticise that trait if you like. But do not pretend it appeared during JD Vance’s lifetime.",
+      "level4Html": "That contrast keeps returning. In the 1990s, French officials worried that “Londonistan” was too soft on Islamic radicals. This repeated an old view abroad, and across much of England, that London is dangerously tolerant. Criticise that trait if you like. But do not pretend it appeared during JD Vance’s lifetime."
     },
     {
       "id": "p-007",
       "kind": "p",
-      "simpleHtml": "The left also indulges in this recency bias. Consider the sweet idea that London “became” commercial only a few decades ago. In today’s typical state-of-London novel, a trillionaire called Dmitri torments an angelic servant on a zero-hours contract in his Holland Park mansion, while somehow never being there. This paint-by-numbers version is forgivable from US correspondents. Others need not take it seriously, or romanticise the past. If anything, the supposedly egalitarian London of the 1970s, when the panic was that Arabs were buying the city, is the exception in a much longer history of near-piratical capitalism. London was called the Great Wen about 200 years ago.",
-      "basicHtml": "The left does this too. It likes the idea that London only “became” commercial recently. In many modern London novels, a billionaire named Dmitri exploits a kind servant in a Holland Park mansion while barely appearing himself. That simple picture is understandable from outsiders, but others should know better. Nor should they romanticise the past. The supposedly fair London of the 1970s was unusual. The city has a much longer history of aggressive capitalism. People were calling it the Great Wen about 200 years ago.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "The left does this too. It likes the idea that London only “became” commercial recently. In many modern London novels, a billionaire named Dmitri exploits a kind servant in a Holland Park mansion while barely appearing himself. That simple picture is understandable from outsiders, but others should know better. Nor should they romanticise the past. The supposedly fair London of the 1970s was unusual. The city has a much longer history of aggressive capitalism. People were calling it the Great Wen about 200 years ago.",
+      "level2Html": "The left does this too. It likes the idea that London only “became” commercial recently. In many modern London novels, a billionaire named Dmitri exploits a kind servant in a Holland Park mansion while barely appearing himself. That simple picture is understandable from outsiders, but others should know better. Nor should they romanticise the past. The supposedly fair London of the 1970s was unusual. The city has a much longer history of aggressive capitalism. People were calling it the Great Wen about 200 years ago.",
+      "level3Html": "The left also indulges in this recency bias. Consider the sweet idea that London “became” commercial only a few decades ago. In today’s typical state-of-London novel, a trillionaire called Dmitri torments an angelic servant on a zero-hours contract in his Holland Park mansion, while somehow never being there. This paint-by-numbers version is forgivable from US correspondents. Others need not take it seriously, or romanticise the past. If anything, the supposedly egalitarian London of the 1970s, when the panic was that Arabs were buying the city, is the exception in a much longer history of near-piratical capitalism. London was called the Great Wen about 200 years ago.",
+      "level4Html": "The left also indulges in this recency bias. Consider the sweet idea that London “became” commercial only a few decades ago. In today’s typical state-of-London novel, a trillionaire called Dmitri torments an angelic servant on a zero-hours contract in his Holland Park mansion, while somehow never being there. This paint-by-numbers version is forgivable from US correspondents. Others need not take it seriously, or romanticise the past. If anything, the supposedly egalitarian London of the 1970s, when the panic was that Arabs were buying the city, is the exception in a much longer history of near-piratical capitalism. London was called the Great Wen about 200 years ago."
     },
     {
       "id": "p-008",
       "kind": "p",
-      "simpleHtml": "Notice the common thread. Whether a critic of London is on the left, or a conservative rich enough to live anywhere and choosing a golf resort, the complaint is often the same: regulate it, regiment it, bring it into line. The anti-foreign instinct and the anti-commercial instinct often go together.",
-      "basicHtml": "The same idea runs through all of this. A London critic may be leftwing, or a rich conservative living on a golf resort. But the demand is often the same: control the city and make it fit a plan. Hostility to foreigners and hostility to commerce often sit close together.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "The same idea runs through all of this. A London critic may be leftwing, or a rich conservative living on a golf resort. But the demand is often the same: control the city and make it fit a plan. Hostility to foreigners and hostility to commerce often sit close together.",
+      "level2Html": "The same idea runs through all of this. A London critic may be leftwing, or a rich conservative living on a golf resort. But the demand is often the same: control the city and make it fit a plan. Hostility to foreigners and hostility to commerce often sit close together.",
+      "level3Html": "Notice the common thread. Whether a critic of London is on the left, or a conservative rich enough to live anywhere and choosing a golf resort, the complaint is often the same: regulate it, regiment it, bring it into line. The anti-foreign instinct and the anti-commercial instinct often go together.",
+      "level4Html": "Notice the common thread. Whether a critic of London is on the left, or a conservative rich enough to live anywhere and choosing a golf resort, the complaint is often the same: regulate it, regiment it, bring it into line. The anti-foreign instinct and the anti-commercial instinct often go together."
     },
     {
       "id": "p-009",
       "kind": "p",
-      "simpleHtml": "Londonophobia is the best proof I know for the horseshoe theory of politics. Left and right end up hating the same thing: liberalism. Both movements, at their core, want control.",
-      "basicHtml": "Dislike of London is the best example I know of the horseshoe theory of politics. The far left and the far right can end up hating the same thing: liberalism. Both want more control.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "Dislike of London is the best example I know of the horseshoe theory of politics. The far left and the far right can end up hating the same thing: liberalism. Both want more control.",
+      "level2Html": "Dislike of London is the best example I know of the horseshoe theory of politics. The far left and the far right can end up hating the same thing: liberalism. Both want more control.",
+      "level3Html": "Londonophobia is the best proof I know for the horseshoe theory of politics. Left and right end up hating the same thing: liberalism. Both movements, at their core, want control.",
+      "level4Html": "Londonophobia is the best proof I know for the horseshoe theory of politics. Left and right end up hating the same thing: liberalism. Both movements, at their core, want control."
     },
     {
       "id": "p-010",
       "kind": "p",
-      "simpleHtml": "For people who think in systems, the city must be offensive. London is loose not only about people, but also about buildings and streets. There is no rational street layout, let alone a grid, thank God, and no consistent architectural style. Places around the corner from each other can feel as if they belong to different centuries. I nominate Holloway Road into Highbury Fields as the sharpest tonal contrast in the city, though I will hear other suggestions.",
-      "basicHtml": "For people who like neat systems, London must be annoying. The city is loose not just with people but with streets and buildings. There is no simple grid, thank God, and no single architectural style. Two nearby places can feel centuries apart. My best example is the change from Holloway Road to Highbury Fields, though I will accept other nominations.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "For people who like neat systems, London must be annoying. The city is loose not just with people but with streets and buildings. There is no simple grid, thank God, and no single architectural style. Two nearby places can feel centuries apart. My best example is the change from Holloway Road to Highbury Fields, though I will accept other nominations.",
+      "level2Html": "For people who like neat systems, London must be annoying. The city is loose not just with people but with streets and buildings. There is no simple grid, thank God, and no single architectural style. Two nearby places can feel centuries apart. My best example is the change from Holloway Road to Highbury Fields, though I will accept other nominations.",
+      "level3Html": "For people who think in systems, the city must be offensive. London is loose not only about people, but also about buildings and streets. There is no rational street layout, let alone a grid, thank God, and no consistent architectural style. Places around the corner from each other can feel as if they belong to different centuries. I nominate Holloway Road into Highbury Fields as the sharpest tonal contrast in the city, though I will hear other suggestions.",
+      "level4Html": "For people who think in systems, the city must be offensive. London is loose not only about people, but also about buildings and streets. There is no rational street layout, let alone a grid, thank God, and no consistent architectural style. Places around the corner from each other can feel as if they belong to different centuries. I nominate Holloway Road into Highbury Fields as the sharpest tonal contrast in the city, though I will hear other suggestions."
     },
     {
       "id": "p-011",
       "kind": "p",
-      "simpleHtml": "Francis Ford Coppola said that <em>Apocalypse Now</em> was so chaotic, expensive and painful to make that it stopped being just about Vietnam. The film <em>was</em> Vietnam. It embodied the madness of the war. By that logic, London is not merely a liberal city. It <em>is</em> liberalism. Its winding streets, architectural jumble and chalk-and-cheese neighbourhoods are what happens when individual choices accumulate over centuries. It could not have been designed from above by someone with one total idea. No wonder the schematically minded find it irritating. The result is, and always has been, a city with all the right enemies.",
-      "basicHtml": "Francis Ford Coppola said making <em>Apocalypse Now</em> became so chaotic and painful that the film was no longer just about Vietnam. The film <em>was</em> Vietnam. In the same way, London is not just a liberal city. It <em>is</em> liberalism. Its winding streets, mixed architecture and very different neighbourhoods are the result of many individual choices over centuries. No single planner with one big idea could have created it. That is why people who love tidy systems dislike it. London has always had the right enemies.",
-      "warnings": []
+      "warnings": [],
+      "level1Html": "Francis Ford Coppola said making <em>Apocalypse Now</em> became so chaotic and painful that the film was no longer just about Vietnam. The film <em>was</em> Vietnam. In the same way, London is not just a liberal city. It <em>is</em> liberalism. Its winding streets, mixed architecture and very different neighbourhoods are the result of many individual choices over centuries. No single planner with one big idea could have created it. That is why people who love tidy systems dislike it. London has always had the right enemies.",
+      "level2Html": "Francis Ford Coppola said making <em>Apocalypse Now</em> became so chaotic and painful that the film was no longer just about Vietnam. The film <em>was</em> Vietnam. In the same way, London is not just a liberal city. It <em>is</em> liberalism. Its winding streets, mixed architecture and very different neighbourhoods are the result of many individual choices over centuries. No single planner with one big idea could have created it. That is why people who love tidy systems dislike it. London has always had the right enemies.",
+      "level3Html": "Francis Ford Coppola said that <em>Apocalypse Now</em> was so chaotic, expensive and painful to make that it stopped being just about Vietnam. The film <em>was</em> Vietnam. It embodied the madness of the war. By that logic, London is not merely a liberal city. It <em>is</em> liberalism. Its winding streets, architectural jumble and chalk-and-cheese neighbourhoods are what happens when individual choices accumulate over centuries. It could not have been designed from above by someone with one total idea. No wonder the schematically minded find it irritating. The result is, and always has been, a city with all the right enemies.",
+      "level4Html": "Francis Ford Coppola said that <em>Apocalypse Now</em> was so chaotic, expensive and painful to make that it stopped being just about Vietnam. The film <em>was</em> Vietnam. It embodied the madness of the war. By that logic, London is not merely a liberal city. It <em>is</em> liberalism. Its winding streets, architectural jumble and chalk-and-cheese neighbourhoods are what happens when individual choices accumulate over centuries. It could not have been designed from above by someone with one total idea. No wonder the schematically minded find it irritating. The result is, and always has been, a city with all the right enemies."
     }
   ]
 }
