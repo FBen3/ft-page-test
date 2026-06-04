@@ -190,7 +190,7 @@ Status: COMPLETED for the static prototype as of 2026-05-21.
 
 ### Phase 3: Precomputed Variant Data
 
-Status: IN PROGRESS as of 2026-06-03.
+Status: API-READY as of 2026-06-04. The local generator, extraction, and validation plumbing exists; live OpenAI generation still needs an `OPENAI_API_KEY`.
 
 Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON assets that make the browser prototype look like a real precomputed feature.
 
@@ -202,11 +202,25 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 - Current temporary bridge: levels 1 and 2 share the old `Basic` text, and levels 3 and 4 share the old `Simple` text, until generated data can provide distinct variants.
 - Updated `phase1-widget.js` to load the JSON file and fall back safely if variants are unavailable.
 - The page should be served over HTTP, for example through static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
-- Keep a small local script or helper workflow for extracting/writing variant JSON, but treat it as behind-the-scenes generation plumbing, not the user-facing demo.
-- Add OpenAI generation only after the JSON shape and browser loading path are stable.
+- Added `scripts/generate_variants.py` as the local/server-side helper for extracting, validating, and generating variant JSON.
+- Caption variants are excluded by default; captions stay original in the browser unless `--include-captions` is explicitly passed.
+- Keep the helper workflow behind the scenes as generation plumbing, not the user-facing demo.
+- Add/run OpenAI generation after the user has created an OpenAI developer account and exported `OPENAI_API_KEY`.
 - Call OpenAI only from a local/server-side generation script or backend environment, never browser code.
 - Load `OPENAI_API_KEY` from the environment when generation is added.
 - Cache generated JSON locally so hackathon demos do not depend on live API calls.
+- Optional dependency `generation` installs the OpenAI Python SDK for this helper.
+
+Phase 3 checklist:
+
+- Completed: JSON assets are loaded by the browser over `fetch()`.
+- Completed: five-level JSON contract is canonical.
+- Completed: generator helper can extract paragraph/body segments from the static article.
+- Completed: generator helper validates checked-in variant JSON against the article DOM.
+- Completed: generator helper has an OpenAI Responses API path with Structured Outputs.
+- Pending user setup: create OpenAI developer account, create API key, and export `OPENAI_API_KEY`.
+- Pending live run: use the generator to replace the duplicated temporary variants with distinct level 1-4 rewrites.
+- Pending QA: manually review generated variants for meaning, tone, quote handling, and FT style.
 
 ### Phase 4: Animation Engine
 
@@ -241,11 +255,12 @@ Goal: move hardcoded demo variants out of `phase1-widget.js` and into JSON asset
 
 ## Recommended Next Step
 
-Build Phase 3 as a data-contract step before adding OpenAI generation:
+Finish Phase 3 by running the generator once API access is available:
 
-- Add a local/server-side helper that can extract segments and write the same five-level JSON shape.
-- Add OpenAI generation after the helper can produce valid JSON deterministically.
-- Keep the UI behavior unchanged while improving the generation pipeline.
+- Install generation dependencies with `uv sync --extra generation`.
+- Export `OPENAI_API_KEY`.
+- Run a one-segment smoke test before generating the full article.
+- Review the generated text manually before treating Phase 3 as fully complete.
 
 This keeps the architecture aligned with the desired finished demo: a static article page that seamlessly loads precomputed language variants.
 

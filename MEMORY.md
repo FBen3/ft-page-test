@@ -49,7 +49,7 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 - Batch API is relevant once generating variants for many articles.
 - Prompt caching may help repeated generation jobs with long shared instructions.
 - Keep the model configurable by environment variable.
-- Official docs checked on 2026-05-10:
+- Official docs checked on 2026-06-04:
 - Responses/text generation: https://platform.openai.com/docs/guides/text
 - Structured Outputs: https://platform.openai.com/docs/guides/structured-outputs
 - Batch API: https://platform.openai.com/docs/guides/batch/
@@ -59,8 +59,8 @@ The product goal is a desktop FT article-page widget that lets readers switch ar
 ## Suggested Next Work
 
 - Continue Phase 3: keep precomputed five-level variant JSON assets as the default data contract.
-- Add a local/server-side helper that can extract article segments and write valid `language_variants/<article-id>.json` files using fields like `level1Html` through `level4Html`.
-- Add OpenAI generation only after the JSON contract is stable.
+- Use `scripts/generate_variants.py` to extract, validate, and eventually generate `language_variants/<article-id>.json` files using fields like `level1Html` through `level4Html`.
+- Add a real OpenAI generation run only after the user creates an OpenAI developer account and exports `OPENAI_API_KEY`.
 - Keep any local script as behind-the-scenes generation plumbing, not the user-facing demo.
 - Add the editorial strike-through/replacement animation after the switching model is stable.
 
@@ -89,11 +89,12 @@ Phase 2 is complete for the static browser prototype.
 
 - `phase1-widget.js` no longer hardcodes the first four paragraph selectors. It now collects eligible article segments from `#article-body`.
 - Segment ids are stable by segment type, for example `p-001`, `caption-001`, and `blockquote-001`.
-- Eligible segments include direct article paragraphs, non-hidden blockquotes, and figure captions. The current page skips the email line, social-follow promo paragraph, hidden pullquote duplicate, and Flourish/error-message content.
+- Browser-eligible segments include direct article paragraphs, non-hidden blockquotes, and figure captions. The current page skips the email line, social-follow promo paragraph, hidden pullquote duplicate, and Flourish/error-message content.
+- Phase 3 generation excludes captions by default, so captions stay original unless `--include-captions` is explicitly passed.
 - Original HTML is stored in memory per segment so toggling back to `Original` restores clean published markup instead of accumulating nested spans or replacement markup.
 - Demo variants now cover the 11 main editorial paragraphs in the captured article.
 - Images, embeds, email links, and social/newsletter utility text are preserved rather than rewritten.
-- Phase 3 still needs a real generation helper/pipeline so future articles can produce the same JSON shape without handcrafted variants.
+- Phase 3 now has a generation helper/pipeline, but still needs a real OpenAI API run so future articles can produce distinct generated variants without handcrafted text.
 
 ## Phase 3 Direction
 
@@ -104,6 +105,10 @@ Phase 3 has been renamed mentally from "Precompute Script" to "Precomputed Varia
 - Five complexity levels are now the default browser/data model. The JSON uses `levels: [1, 2, 3, 4, 5]`, with per-segment `level1Html` through `level4Html`; level 5 restores original published HTML already captured from the DOM.
 - The classic three-button widget is no longer the source of truth. It is only a compact UI variant mapped to levels 5, 3, and 1.
 - Current handcrafted data temporarily duplicates variants across adjacent levels until an OpenAI generation helper can produce distinct five-level text.
+- `scripts/generate_variants.py` now provides `extract`, `validate`, and `generate` commands.
+- The generator uses the OpenAI Responses API with Structured Outputs when `OPENAI_API_KEY` and the optional `generation` dependency are available.
+- `pyproject.toml` has an optional `generation` dependency group for the OpenAI Python SDK.
+- Current checked-in validation is paragraph/body-only by default and excludes captions.
 - If variant JSON cannot load, non-Original changes are skipped and the widget reports that variant data is unavailable.
 - Serve the prototype over HTTP, for example via static hosting or a local dev server, so browser `fetch()` can load JSON reliably.
 - The first implementation should use existing handcrafted variants, not OpenAI, to stabilize the data contract.
